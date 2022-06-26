@@ -40,6 +40,9 @@ dependencies:
   shared_preferences: ^2.0.15
   image_picker: ^0.8.5+3
   scrollable_positioned_list: ^0.2.3
+  intl: ^0.17.0
+  google_place: ^0.4.7
+
   
 dev_dependencies:
   flutter_test:

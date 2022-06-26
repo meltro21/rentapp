@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:rentapp/controllers/add_detail_controller.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
@@ -21,6 +22,30 @@ class _AddDetailHomeState extends State<AddDetailHome> {
   _moveDown(var mediaWidth) {
     _controller.animateTo(_controller.offset + mediaWidth,
         curve: Curves.linear, duration: Duration(milliseconds: 200));
+  }
+
+  DateTime selectedDate = DateTime.now();
+  String startDate = '';
+
+  Future<void> _selectDate(BuildContext context, int dateType) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+        if (dateType == 1) {
+          addDetailController.changeStartDate(selectedDate);
+        } else {
+          addDetailController.changeEndDate(selectedDate);
+        }
+        print(addDetailController.startDate);
+        // startDate = selectedDate.toString();
+        // print('start date is $startDate');
+      });
+    }
   }
 
   @override
@@ -270,29 +295,165 @@ class _AddDetailHomeState extends State<AddDetailHome> {
               decoration: BoxDecoration(
                 border: Border(top: BorderSide(color: Colors.grey)),
               ),
-              child: Container(
-                height: mediaHeight * 0.06,
-                width: mediaWidth,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.pink),
-                margin: EdgeInsets.only(
-                    top: mediaHeight * 0.01, bottom: mediaHeight * 0.01),
-                child:
-                    Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  Icon(
-                    Icons.chat,
-                    color: Colors.white,
-                  ),
-                  SizedBox(
-                    width: mediaWidth * 0.02,
-                  ),
-                  Text(
-                    'Chat',
-                    style: TextStyle(color: Colors.white),
-                  )
-                ]),
-              ),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    //Chat
+                    Container(
+                      height: mediaHeight * 0.06,
+                      width: mediaWidth / 2 - 20,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Color(0xffF4B755)),
+                      margin: EdgeInsets.only(
+                          top: mediaHeight * 0.01, bottom: mediaHeight * 0.01),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.chat,
+                              color: Colors.white,
+                            ),
+                            SizedBox(
+                              width: mediaWidth * 0.02,
+                            ),
+                            Text(
+                              'Chat',
+                              style: TextStyle(color: Colors.white),
+                            )
+                          ]),
+                    ),
+                    //book a wheel
+                    GestureDetector(
+                      onTap: () {
+                        Get.bottomSheet(BottomSheet(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            onClosing: () {},
+                            builder: (context) {
+                              return StatefulBuilder(
+                                builder: ((context, setState) {
+                                  return Container(
+                                    margin: EdgeInsets.only(left: 10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Center(
+                                          child: Container(
+                                            margin: EdgeInsets.only(top: 10),
+                                            child: Text(
+                                              'Enter Details',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 20),
+                                            ),
+                                          ),
+                                        ),
+                                        //Text('Amount/day'),
+                                        TextField(
+                                          decoration: InputDecoration(
+                                            label: Text('Amount/day'),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text('Start Date'),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            _selectDate(context, 1);
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.only(left: 5),
+                                            height: mediaHeight * 0.06,
+                                            width: mediaWidth / 3 + 20,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(),
+                                            ),
+                                            child: Row(children: [
+                                              Obx(
+                                                () => Text(DateFormat.yMMMd()
+                                                    .format(addDetailController
+                                                        .startDate.value)),
+                                              ),
+                                              Icon(Icons.calendar_month),
+                                            ]),
+                                          ),
+                                        ),
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text('End Date'),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            _selectDate(context, 2);
+                                          },
+                                          child: Container(
+                                            padding: EdgeInsets.only(left: 5),
+                                            height: mediaHeight * 0.06,
+                                            width: mediaWidth / 3 + 20,
+                                            decoration: BoxDecoration(
+                                              border: Border.all(),
+                                            ),
+                                            child: Row(children: [
+                                              Obx(
+                                                () => Text(DateFormat.yMMMd()
+                                                    .format(addDetailController
+                                                        .endDate.value)),
+                                              ),
+                                              Icon(Icons.calendar_month),
+                                            ]),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }),
+                              );
+                            }));
+                        // Get.defaultDialog(
+                        //     title: 'Confirmation',
+                        //     content:
+                        //         Text('Are you sure you want to book the weel?'),
+                        //     onConfirm: () {
+                        //       Get.back();
+                        //     },
+                        //     onCancel: () {});
+                      },
+                      child: Container(
+                        height: mediaHeight * 0.06,
+                        width: mediaWidth / 2 - 20,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Color(0xffF4B755)),
+                        margin: EdgeInsets.only(
+                            top: mediaHeight * 0.01,
+                            bottom: mediaHeight * 0.01),
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.car_rental,
+                                color: Colors.white,
+                              ),
+                              SizedBox(
+                                width: mediaWidth * 0.02,
+                              ),
+                              Text(
+                                'Book a Wheel',
+                                style: TextStyle(color: Colors.white),
+                              )
+                            ]),
+                      ),
+                    ),
+                  ]),
             ),
           ),
         ]),

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentapp/controllers/home_screen_controller.dart';
+import 'package:rentapp/controllers/my_adds_controller.dart';
 import 'dart:math' as math;
 
 import 'package:rentapp/views/home/add_detail_Home.dart';
+
+import '../../models/home_screen/featured_deals_model.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -14,6 +17,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   HomeScreenController homeScreenController = Get.put(HomeScreenController());
+  MyAddsController myAddsController = Get.put(MyAddsController());
+
   @override
   Widget build(BuildContext context) {
     var mediaHeight = MediaQuery.of(context).size.height;
@@ -248,17 +253,32 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 onTap: () {
                                                   print('button pressed1');
                                                   int index = j % 2 + i * 2;
+                                                  FeaturedDeals likedAdd =
+                                                      homeScreenController
+                                                          .featuredDeals[index];
+
                                                   homeScreenController
                                                       .addToFavorites(index);
+                                                  myAddsController
+                                                      .addToFavourites(
+                                                          likedAdd);
                                                 },
                                                 child:
                                                     Icon(Icons.favorite_border))
                                             : InkWell(
                                                 onTap: () {
-                                                  print('button pressed1');
                                                   int index = j % 2 + i * 2;
+                                                  print(
+                                                      'button pressed1 index is $index');
+
+                                                  FeaturedDeals likedAdd =
+                                                      homeScreenController
+                                                          .featuredDeals[index];
                                                   homeScreenController
                                                       .addToFavorites(index);
+                                                  myAddsController
+                                                      .removeFromFavouritesUsingHomeScreen(
+                                                          likedAdd.id);
                                                 },
                                                 child: Icon(
                                                   Icons.favorite,

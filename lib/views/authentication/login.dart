@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:rentapp/main.dart';
 import 'package:rentapp/views/authentication/background.dart';
 import 'package:rentapp/views/authentication/register.dart';
+import 'package:rentapp/views/home/home_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   TextEditingController c = TextEditingController();
@@ -74,6 +77,9 @@ class LoginScreen extends StatelessWidget {
                   margin: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
                   child: RaisedButton(
                     onPressed: () {
+                      Get.to(MyHomePage(
+                        title: 'HomePage',
+                      ));
                       if (_form.currentState!.validate()) {}
                     },
                     shape: RoundedRectangleBorder(

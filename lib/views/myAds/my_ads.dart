@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:rentapp/controllers/my_adds_controller.dart';
 
 class MyAds extends StatefulWidget {
   const MyAds({Key? key}) : super(key: key);
@@ -8,6 +11,7 @@ class MyAds extends StatefulWidget {
 }
 
 class _MyAdsState extends State<MyAds> {
+  MyAddsController myAddsController = Get.put(MyAddsController());
   var _height1 = 2.0;
   var _width1 = 200.0;
   var _height2 = 0.0;
@@ -49,6 +53,7 @@ class _MyAdsState extends State<MyAds> {
                 children: [
                   InkWell(
                     onTap: () {
+                      myAddsController.changeSelection(1);
                       changeLength1(mediaWidth);
                       index++;
                       print('index is $index');
@@ -76,6 +81,7 @@ class _MyAdsState extends State<MyAds> {
                   ),
                   InkWell(
                     onTap: () {
+                      myAddsController.changeSelection(2);
                       changeLength2(mediaWidth);
                     },
                     child: Column(
@@ -101,80 +107,167 @@ class _MyAdsState extends State<MyAds> {
                 ]),
           ),
           //list view
-          Expanded(
-            child: ListView.builder(
-                itemCount: 3,
-                itemBuilder: ((context, index) {
-                  return Container(
-                    margin: EdgeInsets.only(left: 10, right: 10, top: 10),
-                    height: mediaHeight * 0.14,
-                    width: mediaWidth,
-                    child: Row(
-                      children: [
-                        Container(
+          Obx(() => myAddsController.selectAdsOrFavourites.value == 1
+              ? Expanded(
+                  child: ListView.builder(
+                      itemCount: 3,
+                      itemBuilder: ((context, index) {
+                        return Container(
+                          margin: EdgeInsets.only(left: 10, right: 10, top: 10),
                           height: mediaHeight * 0.14,
-                          width: mediaWidth * 0.35,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                  'assets/images/image1.jpeg',
-                                ),
-                              ),
-                              borderRadius: BorderRadius.circular(30)),
-                          // child: Image(
-                          //   image: AssetImage(
-                          //     'assets/images/image1.jpeg',
-                          //   ),
-                          //   fit: BoxFit.fill,
-                          //   height: mediaHeight,
-                          //   width: mediaWidth * 0.3,
-                          // ),
-                        ),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          width: mediaWidth,
+                          child: Row(
                             children: [
-                              Text(''),
-                              Row(children: [
-                                Text('Baldozer'),
-                                Expanded(child: SizedBox()),
-                                Icon(
-                                  Icons.favorite,
-                                  color: Colors.red,
-                                ),
-                              ]),
+                              Container(
+                                height: mediaHeight * 0.14,
+                                width: mediaWidth * 0.35,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                        'assets/images/image1.jpeg',
+                                      ),
+                                    ),
+                                    borderRadius: BorderRadius.circular(30)),
+                                // child: Image(
+                                //   image: AssetImage(
+                                //     'assets/images/image1.jpeg',
+                                //   ),
+                                //   fit: BoxFit.fill,
+                                //   height: mediaHeight,
+                                //   width: mediaWidth * 0.3,
+                                // ),
+                              ),
                               SizedBox(
-                                height: mediaHeight * 0.3 * 0.02,
+                                width: 10,
                               ),
-                              Text(
-                                'Rs 4000',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: mediaHeight * 0.3 * 0.01,
-                              ),
-                              Row(children: [
-                                Text(
-                                  'Faisal Town, Lahore',
-                                  style: TextStyle(fontSize: 12),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(''),
+                                    Row(children: [
+                                      Text('Baldozer'),
+                                      // Expanded(child: SizedBox()),
+                                      // Icon(
+                                      //   Icons.favorite,
+                                      //   color: Colors.red,
+                                      // ),
+                                    ]),
+                                    SizedBox(
+                                      height: mediaHeight * 0.3 * 0.02,
+                                    ),
+                                    Text(
+                                      'Rs 4000',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(
+                                      height: mediaHeight * 0.3 * 0.01,
+                                    ),
+                                    Row(children: [
+                                      Text(
+                                        'Faisal Town, Lahore',
+                                        style: TextStyle(fontSize: 12),
+                                      ),
+                                      Expanded(child: SizedBox()),
+                                      Text(
+                                        '18 May',
+                                        style: TextStyle(fontSize: 12),
+                                      )
+                                    ]),
+                                  ],
                                 ),
-                                Expanded(child: SizedBox()),
-                                Text(
-                                  '18 May',
-                                  style: TextStyle(fontSize: 12),
-                                )
-                              ]),
+                              )
                             ],
                           ),
-                        )
-                      ],
-                    ),
-                  );
-                })),
-          )
+                        );
+                      })),
+                )
+              : Expanded(
+                  child: ListView.builder(
+                      itemCount: myAddsController.favouriteAdds.length,
+                      itemBuilder: ((context, index) {
+                        return Container(
+                          margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+                          height: mediaHeight * 0.14,
+                          width: mediaWidth,
+                          child: Row(
+                            children: [
+                              Container(
+                                height: mediaHeight * 0.14,
+                                width: mediaWidth * 0.35,
+                                decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                        myAddsController
+                                            .favouriteAdds[index].path,
+                                      ),
+                                    ),
+                                    borderRadius: BorderRadius.circular(30)),
+                                // child: Image(
+                                //   image: AssetImage(
+                                //     'assets/images/image1.jpeg',
+                                //   ),
+                                //   fit: BoxFit.fill,
+                                //   height: mediaHeight,
+                                //   width: mediaWidth * 0.3,
+                                // ),
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(''),
+                                    Row(children: [
+                                      Text(myAddsController
+                                          .favouriteAdds[index].name),
+                                      Expanded(child: SizedBox()),
+                                      InkWell(
+                                        onTap: () {
+                                          myAddsController
+                                              .removeFromFavourites(index);
+                                        },
+                                        child: Icon(
+                                          Icons.favorite,
+                                          color: Colors.red,
+                                        ),
+                                      ),
+                                    ]),
+                                    SizedBox(
+                                      height: mediaHeight * 0.3 * 0.02,
+                                    ),
+                                    Text(
+                                      myAddsController
+                                          .favouriteAdds[index].price
+                                          .toString(),
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    SizedBox(
+                                      height: mediaHeight * 0.3 * 0.01,
+                                    ),
+                                    Row(children: [
+                                      Text(
+                                        'Faisal Town, Lahore',
+                                        style: TextStyle(fontSize: 12),
+                                      ),
+                                      Expanded(child: SizedBox()),
+                                      Text(
+                                        '18 May',
+                                        style: TextStyle(fontSize: 12),
+                                      )
+                                    ]),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        );
+                      })),
+                ))
         ]),
       ),
     );

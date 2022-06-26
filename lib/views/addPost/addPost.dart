@@ -194,6 +194,7 @@ class _AddPostState extends State<AddPost> {
                     Container(
                       padding: EdgeInsets.only(left: 10),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
@@ -202,7 +203,11 @@ class _AddPostState extends State<AddPost> {
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold),
                           ),
-                          Text('Choose')
+                          Obx(() => addPostController.address.value == ''
+                              ? Text('Choose')
+                              : Flexible(
+                                  child:
+                                      Text(addPostController.address.value))),
                         ],
                       ),
                     ),

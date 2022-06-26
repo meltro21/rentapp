@@ -1,27 +1,12 @@
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:rentapp/models/home_screen/featured_deals_model.dart';
 
 class ConstructionCategory {
   String path;
   String name;
 
   ConstructionCategory(this.path, this.name);
-}
-
-class FeaturedDeals {
-  String path;
-  String name;
-  int price;
-  String location;
-  String date;
-  var favorited = false.obs;
-  FeaturedDeals(
-      {required this.path,
-      required this.name,
-      required this.price,
-      required this.location,
-      required this.date,
-      required this.favorited});
 }
 
 class HomeScreenController extends GetxController {
@@ -40,6 +25,7 @@ class HomeScreenController extends GetxController {
   ];
   List<FeaturedDeals> featuredDeals = [
     FeaturedDeals(
+        id: 1,
         path: 'assets/images/image1.jpeg',
         name: 'Baldozer',
         price: 40000,
@@ -47,6 +33,7 @@ class HomeScreenController extends GetxController {
         date: '18 May',
         favorited: false.obs),
     FeaturedDeals(
+        id: 2,
         path: 'assets/images/image1.jpeg',
         name: 'Baldozer',
         price: 30000,
@@ -54,6 +41,7 @@ class HomeScreenController extends GetxController {
         date: '18 May',
         favorited: false.obs),
     FeaturedDeals(
+        id: 3,
         path: 'assets/images/image1.jpeg',
         name: 'Baldozer',
         price: 40000,
@@ -61,6 +49,7 @@ class HomeScreenController extends GetxController {
         date: '18 May',
         favorited: false.obs),
     FeaturedDeals(
+        id: 4,
         path: 'assets/images/image1.jpeg',
         name: 'Baldozer',
         price: 30000,
