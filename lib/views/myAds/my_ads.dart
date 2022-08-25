@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:rentapp/controllers/add_post_controller.dart';
 import 'package:rentapp/controllers/my_adds_controller.dart';
 
 class MyAds extends StatefulWidget {
@@ -34,6 +35,14 @@ class _MyAdsState extends State<MyAds> {
       _height2 = 3;
       _width2 = width / 2;
     });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    MyAddsController addsController = Get.find();
+    addsController.selectAdsOrFavourites.value = 1;
   }
 
   @override

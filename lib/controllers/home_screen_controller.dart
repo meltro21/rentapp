@@ -34,7 +34,7 @@ class HomeScreenController extends GetxController {
         favorited: false.obs),
     FeaturedDeals(
         id: 2,
-        path: 'assets/images/image1.jpeg',
+        path: 'assets/images/image2.jpeg',
         name: 'Baldozer',
         price: 30000,
         location: 'Faisal Town, Lahore',
@@ -42,7 +42,7 @@ class HomeScreenController extends GetxController {
         favorited: false.obs),
     FeaturedDeals(
         id: 3,
-        path: 'assets/images/image1.jpeg',
+        path: 'assets/images/image4.jpeg',
         name: 'Baldozer',
         price: 40000,
         location: 'Faisal Town, Lahore',
@@ -50,9 +50,9 @@ class HomeScreenController extends GetxController {
         favorited: false.obs),
     FeaturedDeals(
         id: 4,
-        path: 'assets/images/image1.jpeg',
-        name: 'Baldozer',
-        price: 30000,
+        path: 'assets/images/image5.jpeg',
+        name: 'Excavator',
+        price: 15000,
         location: 'Faisal Town, Lahore',
         date: '18 May',
         favorited: false.obs),

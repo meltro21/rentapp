@@ -123,40 +123,44 @@ class _EnterAddressState extends State<SelectLocation> {
                                   .get(addPostController
                                       .predictions[index].placeId
                                       .toString());
+                              var a = addPostController
+                                  .predictions[index].description as String;
                               // addPostController.latitude = result!.result!.geometry!.location!.lat!;
                               // addPostController.longitude = result.result!.geometry!.location!.lng!;
-                              setState(() {
-                                var a = addPostController
-                                    .predictions[index].description as String;
-                                int count = 0;
-                                List<int> commaIndex = [];
-                                for (int i = 0; i < a.length; i++) {
-                                  if (a[i] == ',') {
-                                    count++;
-                                    commaIndex.add(i);
-                                  }
-                                }
-                                double midIndex = count / 2;
-                                int roundedIndex = midIndex.toInt();
-                                String modifiedAddress = '';
-                                for (int i = 0; i < a.length; i++) {
-                                  if (i == commaIndex[roundedIndex]) {
-                                    modifiedAddress += '\n';
-                                  } else {
-                                    modifiedAddress += a[i];
-                                  }
-                                }
-                                print('comma count is $count');
-                                print('comma index is $commaIndex');
-                                print('modified address is $modifiedAddress');
-                                addPostController.locationController.text =
-                                    modifiedAddress;
-                                addPostController.predictions.value = [];
+                              // setState(() {
+                              //   var a = addPostController
+                              //       .predictions[index].description as String;
+                              //   int count = 0;
+                              //   List<int> commaIndex = [];
+                              //   for (int i = 0; i < a.length; i++) {
+                              //     if (a[i] == ',') {
+                              //       count++;
+                              //       commaIndex.add(i);
+                              //     }
+                              //   }
+                              //   double midIndex = count / 2;
+                              //   int roundedIndex = midIndex.toInt();
+                              //   String modifiedAddress = '';
+                              //   for (int i = 0; i < a.length; i++) {
+                              //     if (i == commaIndex[roundedIndex]) {
+                              //       modifiedAddress += '\n';
+                              //     } else {
+                              //       modifiedAddress += a[i];
+                              //     }
+                              //   }
+                              //   print('comma count is $count');
+                              //   print('comma index is $commaIndex');
+                              //   print('modified address is $modifiedAddress');
+                              //   addPostController.locationController.text =
+                              //       modifiedAddress;
+                              //   addPostController.predictions.value = [];
 
-                                print('address is $modifiedAddress');
-                                addPostController.address.value =
-                                    modifiedAddress;
-                              });
+                              //   print('address is $modifiedAddress');
+                              //   addPostController.address.value = a;
+                              // });
+                              addPostController.address.value = a;
+                              addPostController.locationController.text = a;
+
                               Get.back();
                               FocusManager.instance.primaryFocus?.unfocus();
                               //   print('predictions index is ${predictions[index].placeId.toString()}');

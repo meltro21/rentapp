@@ -1,14 +1,19 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:rentapp/views/addPost/addPost.dart';
 import 'package:rentapp/views/authentication/login.dart';
 import 'package:rentapp/views/authentication/register.dart';
+import 'package:rentapp/views/chat/chat_home.dart';
 import 'package:rentapp/views/home/add_detail_Home.dart';
 import 'package:rentapp/views/home/home_screen.dart';
 import 'package:rentapp/views/home/showroom.dart';
 import 'package:rentapp/views/myAds/my_ads.dart';
+import 'package:rentapp/views/profile/profile.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -19,21 +24,15 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MyHomePage(
-        title: 'hy',
-      ),
-    );
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: MyHomePage());
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
+  const MyHomePage({Key? key}) : super(key: key);
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -45,6 +44,8 @@ class _MyHomePageState extends State<MyHomePage> {
     HomeScreen(),
     MyAds(),
     AddPost(),
+    ChatHome(),
+    Profile()
   ];
 
   @override
@@ -66,13 +67,13 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: Icon(Icons.add),
               backgroundColor: Colors.grey[300],
               label: 'SELL'),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
               icon: Icon(Icons.chat_outlined),
-              backgroundColor: Colors.purple,
+              backgroundColor: Colors.grey[300],
               label: 'CHAT'),
-          const BottomNavigationBarItem(
+          BottomNavigationBarItem(
               icon: Icon(Icons.account_circle_outlined),
-              backgroundColor: Colors.pink,
+              backgroundColor: Colors.grey[300],
               label: 'ACCOUNT'),
         ],
         currentIndex: _selectedIndex,
