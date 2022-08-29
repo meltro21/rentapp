@@ -55,19 +55,21 @@ class AddPostController extends GetxController {
     var result = await googlePlace.autocomplete.get(value);
     if (result != null) {
       predictions.value = result.predictions!;
-      print('predictions length is ${predictions.length}');
+      print('predictions length is ${predictions}');
     }
   }
 
   void addPost() async {
     DateTime createdAt = DateTime.now();
+    List<String> urlList = [];
     try {
       var post = await _firestore.collection('Posts').add({
         'category': dropDownValue,
-        'price': priceController.text,
+        'price': int.parse(priceController.text),
         'model': modelController.text,
         'description': descriptionController.text,
-        'createdAt': createdAt
+        'createdAt': createdAt,
+        'address': address.value
       });
       try {
         await _firestore
@@ -80,9 +82,23 @@ class AddPostController extends GetxController {
 
           for (int i = 0; i < myImages.length; i++) {
             Reference ref = _firebaseStorage.ref().child(post.id).child('$i');
-            var a = await ref.putFile(File(myImages[i]));
-            print('ref is $ref');
-            print('put file $a');
+            try {
+              var a = await ref.putFile(File(myImages[i]));
+              var url =
+                  await _firebaseStorage.ref(ref.fullPath).getDownloadURL();
+              urlList.add(url);
+              print('url is $url');
+            } catch (err) {
+              print('posting single image error $err');
+            }
+          }
+          try {
+            await _firestore
+                .collection('Posts')
+                .doc(post.id)
+                .update({'imagesUrl': urlList});
+          } catch (err) {
+            print('Error post list url $err');
           }
         } catch (err) {
           print('uplaod photos Error $err');

@@ -111,7 +111,7 @@ class _EnterAddressState extends State<SelectLocation> {
                               style: TextStyle(color: Colors.black),
                             ),
                             onTap: () async {
-                              print('index is $index');
+                              //print('index is $index');
                               FocusScopeNode currentFocus =
                                   FocusScope.of(context);
                               if (!currentFocus.hasPrimaryFocus &&
@@ -123,8 +123,11 @@ class _EnterAddressState extends State<SelectLocation> {
                                   .get(addPostController
                                       .predictions[index].placeId
                                       .toString());
+                              print(
+                                  'result is ${result!.result!.geometry!.location!.lat}');
                               var a = addPostController
                                   .predictions[index].description as String;
+                              print('a is $a');
                               // addPostController.latitude = result!.result!.geometry!.location!.lat!;
                               // addPostController.longitude = result.result!.geometry!.location!.lng!;
                               // setState(() {

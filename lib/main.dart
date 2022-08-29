@@ -7,7 +7,6 @@ import 'package:rentapp/views/authentication/register.dart';
 import 'package:rentapp/views/chat/chat_home.dart';
 import 'package:rentapp/views/home/add_detail_Home.dart';
 import 'package:rentapp/views/home/home_screen.dart';
-import 'package:rentapp/views/home/showroom.dart';
 import 'package:rentapp/views/myAds/my_ads.dart';
 import 'package:rentapp/views/profile/profile.dart';
 

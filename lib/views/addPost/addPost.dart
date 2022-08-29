@@ -125,7 +125,7 @@ class _AddPostState extends State<AddPost> {
                     SizedBox(
                       height: mediaHeight * 0.02,
                     ),
-                    const Text('Select a Category'),
+                    const Text('Select Category'),
                     Container(
                       width: mediaWidth,
                       child: DropdownButton<String>(

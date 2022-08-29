@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentapp/controllers/home_screen_controller.dart';
 import 'package:rentapp/controllers/my_adds_controller.dart';
+import 'package:rentapp/controllers/search_post_controller.dart';
+import 'package:rentapp/models/posts_model.dart';
 import 'dart:math' as math;
 
 import 'package:rentapp/views/home/add_detail_Home.dart';
+import 'package:rentapp/views/searchPost/search_post.dart';
 
 import '../../models/home_screen/featured_deals_model.dart';
 
@@ -36,6 +39,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Padding(
                   padding: EdgeInsets.only(left: 16, right: 16, top: 16),
                   child: TextField(
+                    onTap: () {
+                      Get.to(SearchPost());
+                    },
+                    readOnly: true,
                     decoration: InputDecoration(
                       hintText: 'Search',
                       hintStyle: TextStyle(fontSize: 16),
@@ -220,8 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               InkWell(
                                 onTap: () {
                                   Get.to(AddDetailHome(
-                                    path: homeScreenController
-                                        .featuredDeals[(j % 2 + i * 2)].path,
+                                    postDetails: PostsModel.empty(),
                                   ));
                                 },
                                 child: Container(

@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:rentapp/controllers/add_detail_controller.dart';
+import 'package:rentapp/models/posts_model.dart';
 import 'package:rentapp/views/chat/chat_detail.dart';
 import 'package:rentapp/views/home/maps.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 class AddDetailHome extends StatefulWidget {
-  String path;
-  AddDetailHome({Key? key, required this.path}) : super(key: key);
+  PostsModel postDetails;
+  AddDetailHome({Key? key, required this.postDetails}) : super(key: key);
 
   @override
   State<AddDetailHome> createState() => _AddDetailHomeState();
@@ -16,13 +17,23 @@ class AddDetailHome extends StatefulWidget {
 
 class _AddDetailHomeState extends State<AddDetailHome> {
   AddDetailController addDetailController = Get.put(AddDetailController());
+  int currentPic = 1;
+
   late ScrollController _controller;
-  _moveUp(var mediaWidth) {
+  _moveUp(var mediaWidth, int index) {
+    print('index is $index');
+    setState(() {
+      currentPic = index + 1;
+    });
     _controller.animateTo(_controller.offset - mediaWidth,
         curve: Curves.linear, duration: Duration(milliseconds: 200));
   }
 
-  _moveDown(var mediaWidth) {
+  _moveDown(var mediaWidth, int index) {
+    print('index is $index');
+    setState(() {
+      currentPic = index + 1;
+    });
     _controller.animateTo(_controller.offset + mediaWidth,
         curve: Curves.linear, duration: Duration(milliseconds: 200));
   }
@@ -82,7 +93,7 @@ class _AddDetailHomeState extends State<AddDetailHome> {
                       ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         controller: _controller,
-                        itemCount: 3,
+                        itemCount: widget.postDetails.imagesUrl.length,
                         itemExtent: mediaWidth,
                         scrollDirection: Axis.horizontal,
                         itemBuilder: ((context, index) {
@@ -90,20 +101,24 @@ class _AddDetailHomeState extends State<AddDetailHome> {
                             onPanUpdate: (details) {
                               if (details.delta.direction > 0) {
                                 print('swipe left');
-                                _moveUp(mediaWidth);
+                                _moveUp(mediaWidth, index);
                               }
 
                               // Swiping in left direction.
                               if (details.delta.direction < 0) {
                                 print('swipe right');
-                                _moveDown(mediaWidth);
+                                _moveDown(mediaWidth, index);
                               }
                             },
                             child: Container(
-                              child: Image.asset(
-                                widget.path,
-                                fit: BoxFit.fill,
-                                width: mediaWidth,
+                              height: mediaHeight * 0.14,
+                              width: mediaWidth * 0.35,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    widget.postDetails.imagesUrl[index],
+                                  ),
+                                ),
                               ),
                             ),
                           );
@@ -123,11 +138,11 @@ class _AddDetailHomeState extends State<AddDetailHome> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  '1/',
+                                  '$currentPic/',
                                   style: TextStyle(color: Colors.white),
                                 ),
                                 Text(
-                                  '3',
+                                  '${widget.postDetails.imagesUrl.length}',
                                   style: TextStyle(color: Colors.white),
                                 ),
                               ]),
@@ -143,7 +158,7 @@ class _AddDetailHomeState extends State<AddDetailHome> {
                   Padding(
                     padding: EdgeInsets.only(left: 10),
                     child: Text(
-                      'Rs 4,000/day',
+                      'Rs ${widget.postDetails.price}/day',
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -151,7 +166,7 @@ class _AddDetailHomeState extends State<AddDetailHome> {
                   Padding(
                     padding: EdgeInsets.only(left: 10, top: 5),
                     child: Text(
-                      'Buldozer',
+                      '${widget.postDetails.model}',
                       style: TextStyle(),
                     ),
                   ),
@@ -159,7 +174,12 @@ class _AddDetailHomeState extends State<AddDetailHome> {
                     padding: EdgeInsets.only(left: 10, right: 10),
                     child: Row(
                       children: [
-                        Text('Faisal Town, Lahore'),
+                        Expanded(
+                            child: Text(
+                          '${widget.postDetails.address}',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 3,
+                        )),
                         Icon(Icons.location_on),
                         Expanded(
                           child: SizedBox(),
@@ -189,14 +209,14 @@ class _AddDetailHomeState extends State<AddDetailHome> {
                         ? Padding(
                             padding: EdgeInsets.only(left: 10, right: 10),
                             child: Text(
-                              "Did you know the word ‘essay’ is derived from a Latin word ‘exagium’, which roughly translates to presenting one’s case? So essays are a short piece of writing representing one’s side of the argument or one’s experiences, stories, etc. Essays are very personalized. So let us learn about types of essays, format, and tips for essay-writing.",
+                              "${widget.postDetails.description}",
                               maxLines: 4,
                             ),
                           )
                         : Padding(
                             padding: EdgeInsets.only(left: 10, right: 10),
                             child: Text(
-                              "Did you know the word ‘essay’ is derived from a Latin word ‘exagium’, which roughly translates to presenting one’s case? So essays are a short piece of writing representing one’s side of the argument or one’s experiences, stories, etc. Essays are very personalized. So let us learn about types of essays, format, and tips for essay-writing.",
+                              "${widget.postDetails.description}",
                             ),
                           ),
                   ),
