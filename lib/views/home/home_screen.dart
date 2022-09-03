@@ -40,7 +40,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: EdgeInsets.only(left: 16, right: 16, top: 16),
                   child: TextField(
                     onTap: () {
-                      Get.to(SearchPost());
+                      Get.to(SearchPost(
+                        query: '',
+                      ));
                     },
                     readOnly: true,
                     decoration: InputDecoration(
@@ -134,39 +136,55 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    Container(
-                      margin: EdgeInsets.only(left: mediaWidth * 0.02),
-                      height: mediaHeight * 0.22,
-                      width: mediaWidth,
-                      child: GridView(
-                        scrollDirection: Axis.horizontal,
-                        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-                          maxCrossAxisExtent: mediaWidth / 4 - 5,
-                          crossAxisSpacing: 2,
-                          mainAxisSpacing: 2,
-                        ),
-                        children: List.generate(8, (index) {
-                          return Card(
-                            elevation: 10,
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(35)),
-                              child: Column(children: [
-                                SizedBox(
-                                  height: 10,
+                    Obx(
+                      () => homeScreenController.category == 1
+                          ? Container(
+                              margin: EdgeInsets.only(left: mediaWidth * 0.02),
+                              height: mediaHeight * 0.22,
+                              width: mediaWidth,
+                              child: GridView(
+                                scrollDirection: Axis.horizontal,
+                                gridDelegate:
+                                    SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: mediaWidth / 4 - 5,
+                                  crossAxisSpacing: 2,
+                                  mainAxisSpacing: 2,
                                 ),
-                                Image.asset(
-                                  homeScreenController
-                                      .constructionCategory[index].path,
-                                  height: (mediaWidth / 4) / 2 - 10,
-                                ),
-                                Text(homeScreenController
-                                    .constructionCategory[index].name),
-                              ]),
-                            ),
-                          );
-                        }),
-                      ),
+                                children: List.generate(8, (index) {
+                                  return InkWell(
+                                    onTap: (() {
+                                      Get.to(SearchPost(
+                                          query: homeScreenController
+                                              .constructionCategory[index].name
+                                              .toLowerCase()));
+                                    }),
+                                    child: Card(
+                                      elevation: 10,
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(35)),
+                                        child: Column(children: [
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Image.asset(
+                                            homeScreenController
+                                                .constructionCategory[index]
+                                                .path,
+                                            height: (mediaWidth / 4) / 2 - 10,
+                                          ),
+                                          Text(homeScreenController
+                                              .constructionCategory[index]
+                                              .name),
+                                        ]),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                              ),
+                            )
+                          : SizedBox(),
                     ),
                     //Featured Ads Container
                     Container(

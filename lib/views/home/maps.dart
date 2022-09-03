@@ -3,58 +3,76 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class Maps extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Google Maps Demo',
-      home: MapsSample(),
-    );
-  }
-}
-
 class MapsSample extends StatefulWidget {
+  double lat;
+  double lng;
+  String address;
+  MapsSample({required this.lat, required this.lng, required this.address});
   @override
   State<MapsSample> createState() => MapSampleState();
 }
 
 class MapSampleState extends State<MapsSample> {
   Completer<GoogleMapController> _controller = Completer();
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  late CameraPosition _kGooglePlex;
+  late CameraPosition _kLake;
+  // final MarkerId markerId = MarkerId('1');
+  //      Marker marker = Marker(
+  //     markerId: markerId,
 
-  static final CameraPosition _kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
-    zoom: 14.4746,
-  );
+  //   );
 
-  static final CameraPosition _kLake = CameraPosition(
-      bearing: 192.8334901395799,
-      target: LatLng(31.4815, 74.3030),
-      tilt: 59.440717697143555,
-      zoom: 19.151926040649414);
+  void _onMapCreated(GoogleMapController controller) {
+    //mapController = controller;
+
+    final marker = Marker(
+      markerId: MarkerId('place_name'),
+      position: LatLng(widget.lat, widget.lng),
+      // icon: BitmapDescriptor.,
+      infoWindow: InfoWindow(
+        title: 'title',
+        snippet: 'address',
+      ),
+    );
+
+    setState(() {
+      markers[MarkerId('place_name')] = marker;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _kGooglePlex = CameraPosition(
+        target: LatLng(widget.lat, widget.lng), zoom: 15.151926040649414);
+  }
 
   @override
   Widget build(BuildContext context) {
+    print('lat is ${widget.lat}');
+    print('lng is ${widget.lng}');
     return new Scaffold(
       appBar: AppBar(
-        title: Text('Location'),
+        title: Text('${widget.address}'),
       ),
       body: GoogleMap(
-        mapType: MapType.satellite,
+        markers: markers.values.toSet(),
+        mapType: MapType.normal,
         initialCameraPosition: _kGooglePlex,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
+        onMapCreated: _onMapCreated,
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _goToTheLake,
-        label: Text('To the location!'),
-        icon: Icon(Icons.directions_boat),
-      ),
+      // floatingActionButton: FloatingActionButton.extended(
+      //   onPressed: _goToTheLake,
+      //   label: Text('To the location!'),
+      //   icon: Icon(Icons.directions_boat),
+      // ),
     );
   }
 
-  Future<void> _goToTheLake() async {
-    final GoogleMapController controller = await _controller.future;
-    controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
-  }
+  // Future<void> _goToTheLake() async {
+  //   final GoogleMapController controller = await _controller.future;
+  //   controller.animateCamera(CameraUpdate.newCameraPosition(_kLake));
+  // }
 }

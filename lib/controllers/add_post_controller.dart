@@ -17,10 +17,14 @@ class AddPostController extends GetxController {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController locationController = TextEditingController();
   var address = ''.obs;
+  double? lat = 0.0;
+  double? lng = 0.0;
 
   late GooglePlace googlePlace;
 
-  String dropDownValue = '';
+  Rx<String> dropDownValue = ''.obs;
+  String subCategoryDropDownValue = '';
+
   var myImages = [].obs;
   var imageIsSelected = false.obs;
 
@@ -45,6 +49,11 @@ class AddPostController extends GetxController {
     }
   }
 
+  void selectCategory(String value) {
+    subCategoryDropDownValue = '';
+    dropDownValue.value = value;
+  }
+
   void setGooglePlaceApiKey() {
     String apiKey = "AIzaSyCcAsVWMa5EasKOmtXFMXaZgbILGBLrG0w";
     googlePlace = GooglePlace(apiKey);
@@ -64,12 +73,15 @@ class AddPostController extends GetxController {
     List<String> urlList = [];
     try {
       var post = await _firestore.collection('Posts').add({
-        'category': dropDownValue,
+        'category': dropDownValue.value,
+        'subCategory': subCategoryDropDownValue,
         'price': int.parse(priceController.text),
         'model': modelController.text,
         'description': descriptionController.text,
         'createdAt': createdAt,
-        'address': address.value
+        'address': address.value,
+        'lat': lat,
+        'lng': lng
       });
       try {
         await _firestore
@@ -109,5 +121,59 @@ class AddPostController extends GetxController {
     } catch (err) {
       print('add post error $err');
     }
+  }
+
+  bool checkEmptyField() {
+    if (myImages.isEmpty) {
+      print('1');
+      emptyFieldDialogBox('No Image Found', 'Add an image');
+      return false;
+    } else {
+      if (dropDownValue.isEmpty) {
+        emptyFieldDialogBox('No Category Selected', 'select a category');
+
+        return false;
+      } else {
+        if (subCategoryDropDownValue.isEmpty) {
+          emptyFieldDialogBox('No Subcategory added', 'add subcategory');
+        } else {
+          if (priceController.text.isEmpty) {
+            emptyFieldDialogBox('No Price Added', 'add a price');
+
+            return false;
+          } else {
+            if (modelController.text.isEmpty) {
+              emptyFieldDialogBox('No Model Added', 'add a model');
+
+              return false;
+            } else {
+              if (descriptionController.text.isEmpty) {
+                emptyFieldDialogBox(
+                    'No Description Found', 'add some description');
+
+                return false;
+              } else {
+                if (address.value.isEmpty) {
+                  emptyFieldDialogBox('No Locaiton Found', 'select a location');
+
+                  return false;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    return true;
+  }
+
+  void emptyFieldDialogBox(String title, String error) {
+    Get.defaultDialog(
+        title: title,
+        content: Column(
+          children: [
+            Text(error),
+          ],
+        ));
   }
 }

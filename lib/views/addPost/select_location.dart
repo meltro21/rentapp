@@ -161,6 +161,10 @@ class _EnterAddressState extends State<SelectLocation> {
                               //   print('address is $modifiedAddress');
                               //   addPostController.address.value = a;
                               // });
+                              addPostController.lat =
+                                  result.result!.geometry!.location!.lat;
+                              addPostController.lng =
+                                  result.result!.geometry!.location!.lng;
                               addPostController.address.value = a;
                               addPostController.locationController.text = a;
 

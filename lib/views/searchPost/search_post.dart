@@ -3,12 +3,14 @@ import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import 'package:rentapp/controllers/search_post_controller.dart';
 
 import '../home/add_detail_Home.dart';
 
 class SearchPost extends StatefulWidget {
-  const SearchPost({Key? key}) : super(key: key);
+  String query;
+  SearchPost({Key? key, required this.query}) : super(key: key);
 
   @override
   State<SearchPost> createState() => _SearchPostState();
@@ -23,6 +25,13 @@ class _SearchPostState extends State<SearchPost> {
     super.initState();
     searchPostController.fromController.text = '0';
     searchPostController.toController.text = '10000';
+    if (widget.query.isNotEmpty) {
+      print('values is ${widget.query}');
+      searchPostController.setPriceInitialValue();
+      searchPostController.searchItem = widget.query;
+      searchPostController.getPosts(widget.query);
+      searchPostController.searchMode.value = SearchMode.afterSearch;
+    }
   }
 
   @override
@@ -302,7 +311,7 @@ class _SearchPostState extends State<SearchPost> {
                                     Row(children: [
                                       Expanded(
                                         child: Container(
-                                          width: mediaWidth / 2,
+                                          // width: mediaWidth / 2,
                                           child: Text(
                                             '${searchPostController.postsList[index].address}',
                                             style: TextStyle(fontSize: 12),
@@ -312,7 +321,9 @@ class _SearchPostState extends State<SearchPost> {
                                       ),
                                       Expanded(child: SizedBox()),
                                       Text(
-                                        '18 May',
+                                        DateFormat('d MMM yyyy').format(
+                                            searchPostController
+                                                .postsList[index].createdAt),
                                         style: TextStyle(fontSize: 12),
                                       )
                                     ]),

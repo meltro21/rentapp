@@ -17,6 +17,7 @@ class _AddPostState extends State<AddPost> {
   final _form = GlobalKey<FormState>();
 
   var addPostController = Get.put(AddPostController());
+
   @override
   Widget build(BuildContext context) {
     var statusBarHeight = MediaQuery.of(context).padding.top;
@@ -24,6 +25,24 @@ class _AddPostState extends State<AddPost> {
     mediaHeight -= statusBarHeight;
     statusBarHeight = MediaQuery.of(context).padding.bottom;
     mediaHeight -= statusBarHeight;
+    List<String> subCategoryConstruction = [
+      '',
+      'Backhoe',
+      'Dumptruck',
+      'Grader',
+      'Paver',
+      'Bulldozer',
+      'Excavator',
+      'Loader',
+      'Trencher'
+    ];
+    List<String> subCategoryAgriculture = [
+      '',
+      'Baler',
+      'Cultivator',
+      'Seeder',
+      'Drill'
+    ];
 
     var mediaWidth = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -129,7 +148,7 @@ class _AddPostState extends State<AddPost> {
                     Container(
                       width: mediaWidth,
                       child: DropdownButton<String>(
-                        value: addPostController.dropDownValue,
+                        value: addPostController.dropDownValue.value,
                         icon: const SizedBox(),
                         // icon: Align(
                         //   alignment:Alignment.topLeft,
@@ -141,8 +160,9 @@ class _AddPostState extends State<AddPost> {
                           color: Colors.grey,
                         ),
                         onChanged: (String? newValue) {
+                          addPostController.selectCategory(newValue!);
                           setState(() {
-                            addPostController.dropDownValue = newValue!;
+                            addPostController.dropDownValue.value = newValue!;
                           });
                         },
                         items: <String>['', 'Construction', 'Agriculture']
@@ -154,7 +174,88 @@ class _AddPostState extends State<AddPost> {
                         }).toList(),
                       ),
                     ),
-
+                    //Sub category
+                    SizedBox(
+                      height: mediaHeight * 0.02,
+                    ),
+                    Obx(
+                      (() => addPostController.dropDownValue.value ==
+                              'Construction'
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                  const Text('Select SubCategory'),
+                                  Container(
+                                    width: mediaWidth,
+                                    child: DropdownButton<String>(
+                                      value: addPostController
+                                          .subCategoryDropDownValue,
+                                      icon: const SizedBox(),
+                                      // icon: Align(
+                                      //   alignment:Alignment.topLeft,
+                                      //   child: const Icon(Icons.arrow_downward)),
+                                      elevation: 16,
+                                      style: TextStyle(color: Colors.grey[600]),
+                                      underline: Container(
+                                        height: 1,
+                                        color: Colors.grey,
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          addPostController
+                                                  .subCategoryDropDownValue =
+                                              newValue!;
+                                        });
+                                      },
+                                      items: subCategoryConstruction
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ])
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                  const Text('Select SubCategory'),
+                                  Container(
+                                    width: mediaWidth,
+                                    child: DropdownButton<String>(
+                                      value: addPostController
+                                          .subCategoryDropDownValue,
+                                      icon: const SizedBox(),
+                                      // icon: Align(
+                                      //   alignment:Alignment.topLeft,
+                                      //   child: const Icon(Icons.arrow_downward)),
+                                      elevation: 16,
+                                      style: TextStyle(color: Colors.grey[600]),
+                                      underline: Container(
+                                        height: 1,
+                                        color: Colors.grey,
+                                      ),
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          addPostController
+                                                  .subCategoryDropDownValue =
+                                              newValue!;
+                                        });
+                                      },
+                                      items: subCategoryAgriculture
+                                          .map<DropdownMenuItem<String>>(
+                                              (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ])),
+                    ),
                     //Price
                     TextFormField(
                       validator: (value) {
@@ -252,7 +353,10 @@ class _AddPostState extends State<AddPost> {
                       onTap: (() {
                         print('Hello');
                         //if (_form.currentState!.validate()) {
-                        addPostController.addPost();
+                        if (addPostController.checkEmptyField()) {
+                          addPostController.addPost();
+                        }
+
                         //}
                       }),
                       child: Center(

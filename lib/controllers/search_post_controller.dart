@@ -32,7 +32,7 @@ class SearchPostController extends GetxController {
         int to = int.parse(toController.text);
         posts = await _firebaseFirestore
             .collection('Posts')
-            .where('model', isEqualTo: query)
+            .where('subCategory', isEqualTo: query)
             .where('price', isGreaterThan: from)
             .where('price', isLessThan: to)
             .get();
@@ -41,7 +41,7 @@ class SearchPostController extends GetxController {
         searchFilterEnabled.value = false;
         posts = await _firebaseFirestore
             .collection('Posts')
-            .where('model', isEqualTo: query)
+            .where('subCategory', isEqualTo: query)
             .get();
       }
 
@@ -53,6 +53,8 @@ class SearchPostController extends GetxController {
         temp.description = posts.docs[i]['description'];
         temp.imagesUrl = posts.docs[i]['imagesUrl'];
         temp.address = posts.docs[i]['address'];
+        temp.lat = posts.docs[i]['lat'];
+        temp.lng = posts.docs[i]['lng'];
         //temp.createdAt = posts.docs[i]['createdAt'];
         postsList.add(temp);
       }
