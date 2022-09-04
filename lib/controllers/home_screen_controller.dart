@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:rentapp/models/home_screen/featured_deals_model.dart';
+import 'package:rentapp/models/posts_model.dart';
 
 class ConstructionCategory {
   String path;
@@ -10,6 +13,14 @@ class ConstructionCategory {
 }
 
 class HomeScreenController extends GetxController {
+  FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  RxList<PostsModel> postsList = <PostsModel>[].obs;
+  late User user;
+  String userId = '';
+  Rx<bool> loading = false.obs;
+
   List<ConstructionCategory> constructionCategory = [
     ConstructionCategory('assets/images/construction/backhoe.png', 'Backhoe'),
     ConstructionCategory(
@@ -23,6 +34,36 @@ class HomeScreenController extends GetxController {
     ConstructionCategory('assets/images/construction/paver.png', 'Paver'),
     ConstructionCategory('assets/images/construction/trencher.png', 'Trencher'),
   ];
+
+  getPosts() async {
+    user = _firebaseAuth.currentUser!;
+    userId = user.uid;
+    loading.value = false;
+    try {
+      var posts = await _firebaseFirestore.collection('Posts').get();
+      print('posts is $posts');
+      for (int i = 0; i < posts.docs.length; i++) {
+        PostsModel temp = PostsModel.empty();
+        temp.id = posts.docs[i]['id'];
+        temp.category = posts.docs[i]['category'];
+        temp.subCategory = posts.docs[i]['subCategory'];
+        temp.price = posts.docs[i]['price'];
+        temp.model = posts.docs[i]['model'];
+        temp.description = posts.docs[i]['description'];
+        temp.imagesUrl = posts.docs[i]['imagesUrl'];
+        temp.address = posts.docs[i]['address'];
+        temp.lat = posts.docs[i]['lat'];
+        temp.lng = posts.docs[i]['lng'];
+        temp.userId = posts.docs[i]['userId'];
+        //temp.createdAt = posts.docs[i]['createdAt'];
+        postsList.add(temp);
+      }
+      loading.value = true;
+    } catch (err) {
+      print('getPost error $err');
+    }
+  }
+
   List<FeaturedDeals> featuredDeals = [
     FeaturedDeals(
         id: 1,

@@ -1,4 +1,5 @@
 class PostsModel {
+  late String id;
   late String category;
   late String subCategory;
   late int price;
@@ -12,7 +13,8 @@ class PostsModel {
   late List<dynamic> imagesUrl;
 
   PostsModel(
-      {required this.category,
+      {required this.id,
+      required this.category,
       required this.subCategory,
       required this.price,
       required this.model,
@@ -25,6 +27,7 @@ class PostsModel {
       required this.imagesUrl});
 
   PostsModel.empty() {
+    id = '';
     category = '';
     subCategory = '';
     price = 0;

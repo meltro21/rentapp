@@ -47,6 +47,7 @@ class SearchPostController extends GetxController {
 
       for (int i = 0; i < posts.docs.length; i++) {
         PostsModel temp = PostsModel.empty();
+        temp.id = posts.docs[i]['id'];
         temp.category = posts.docs[i]['category'];
         temp.price = posts.docs[i]['price'];
         temp.model = posts.docs[i]['model'];

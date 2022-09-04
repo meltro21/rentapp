@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import 'package:rentapp/controllers/add_post_controller.dart';
 import 'package:rentapp/controllers/my_adds_controller.dart';
 import 'package:rentapp/views/home/add_detail_Home.dart';
@@ -184,7 +185,8 @@ class _MyAdsState extends State<MyAds> {
                                         Text(''),
                                         Row(children: [
                                           Text(myAddsController
-                                              .postsList[index].model),
+                                              .postsList[index].subCategory
+                                              .toUpperCase()),
                                           // Expanded(child: SizedBox()),
                                           // Icon(
                                           //   Icons.favorite,
@@ -202,20 +204,23 @@ class _MyAdsState extends State<MyAds> {
                                         SizedBox(
                                           height: mediaHeight * 0.3 * 0.01,
                                         ),
-                                        Row(children: [
-                                          Expanded(
-                                            child: Container(
-                                              width: mediaWidth / 2,
-                                              child: Text(
-                                                '${myAddsController.postsList[index].address}',
-                                                style: TextStyle(fontSize: 12),
-                                                overflow: TextOverflow.ellipsis,
-                                              ),
+                                        Expanded(
+                                          child: Container(
+                                            width: mediaWidth / 2,
+                                            child: Text(
+                                              '${myAddsController.postsList[index].address}',
+                                              style: TextStyle(fontSize: 12),
+                                              overflow: TextOverflow.ellipsis,
                                             ),
                                           ),
+                                        ),
+                                        Row(children: [
                                           Expanded(child: SizedBox()),
                                           Text(
-                                            '18 May',
+                                            DateFormat('d MMM yyyy').format(
+                                                myAddsController
+                                                    .postsList[index]
+                                                    .createdAt),
                                             style: TextStyle(fontSize: 12),
                                           )
                                         ]),

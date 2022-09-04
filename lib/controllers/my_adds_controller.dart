@@ -54,6 +54,7 @@ class MyAddsController extends GetxController {
       print('posts is $posts');
       for (int i = 0; i < posts.docs.length; i++) {
         PostsModel temp = PostsModel.empty();
+        temp.id = posts.docs[i]['id'];
         temp.category = posts.docs[i]['category'];
         temp.subCategory = posts.docs[i]['subCategory'];
         temp.price = posts.docs[i]['price'];

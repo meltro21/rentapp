@@ -74,7 +74,7 @@ class AddPostController extends GetxController {
     try {
       var post = await _firestore.collection('Posts').add({
         'category': dropDownValue.value,
-        'subCategory': subCategoryDropDownValue,
+        'subCategory': subCategoryDropDownValue.toLowerCase(),
         'price': int.parse(priceController.text),
         'model': modelController.text,
         'description': descriptionController.text,

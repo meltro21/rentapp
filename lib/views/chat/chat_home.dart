@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rentapp/models/posts_model.dart';
 import 'package:rentapp/views/chat/chat_detail.dart';
 
 import '../../models/chat/chat_user_model.dart';
@@ -84,7 +85,9 @@ class _ChatHomeState extends State<ChatHome> {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () {
-                    Get.to(ChatDetail());
+                    Get.to(ChatDetail(
+                      postDetails: PostsModel.empty(),
+                    ));
                   },
                   child: Container(
                     padding: EdgeInsets.only(

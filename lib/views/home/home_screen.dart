@@ -23,6 +23,13 @@ class _HomeScreenState extends State<HomeScreen> {
   MyAddsController myAddsController = Get.put(MyAddsController());
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    homeScreenController.getPosts();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var mediaHeight = MediaQuery.of(context).size.height;
     var mediaWidth = MediaQuery.of(context).size.width;
@@ -79,7 +86,8 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                 height: mediaHeight * 0.8,
                 child: SingleChildScrollView(
-                  child: Column(children: [
+                    child: Column(
+                  children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -235,123 +243,156 @@ class _HomeScreenState extends State<HomeScreen> {
                           ]),
                     ),
                     //list of adds rows
+
                     for (int i = 0; i < 2; i++)
-                      Container(
-                        margin: EdgeInsets.only(top: 5),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            for (int j = 0; j < 2; j++)
-                              InkWell(
-                                onTap: () {
-                                  Get.to(AddDetailHome(
-                                    postDetails: PostsModel.empty(),
-                                  ));
-                                },
-                                child: Container(
-                                  height: mediaHeight * 0.529 / 1.7 - 30,
-                                  width: mediaWidth / 2 - 20,
-                                  padding: EdgeInsets.only(left: 10),
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[200],
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Image.asset(
-                                        homeScreenController
-                                            .featuredDeals[(j % 2 + i * 2)]
-                                            .path,
-                                        fit: BoxFit.fill,
-                                        width: mediaWidth / 2 - 20,
-                                        height: (mediaHeight * 0.529 / 2) / 1.5,
-                                      ),
-                                      SizedBox(
-                                        height: mediaHeight * 0.3 * 0.01,
-                                      ),
-                                      Row(children: [
-                                        Text('Baldozer'),
-                                        Expanded(child: SizedBox()),
-                                        Obx(
-                                          () => homeScreenController
-                                                      .featuredDeals[
-                                                          (j % 2 + i * 2)]
-                                                      .favorited ==
-                                                  false
-                                              ? InkWell(
-                                                  onTap: () {
-                                                    print('button pressed1');
-                                                    int index = j % 2 + i * 2;
-                                                    FeaturedDeals likedAdd =
-                                                        homeScreenController
-                                                                .featuredDeals[
-                                                            index];
+                      Obx(
+                        () => homeScreenController.loading.value == true
+                            ? Container(
+                                margin: EdgeInsets.only(top: 5),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    for (int j = 0; j < 2; j++)
+                                      InkWell(
+                                        onTap: () {
+                                          Get.to(AddDetailHome(
+                                            postDetails: homeScreenController
+                                                .postsList[(j % 2 + i * 2)],
+                                          ));
+                                        },
+                                        child: Container(
+                                          height:
+                                              mediaHeight * 0.529 / 1.7 - 30,
+                                          width: mediaWidth / 2 - 20,
+                                          padding: EdgeInsets.only(left: 10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.grey[200],
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Image.network(
+                                                homeScreenController
+                                                    .postsList[(j % 2 + i * 2)]
+                                                    .imagesUrl[0],
+                                                fit: BoxFit.fill,
+                                                width: mediaWidth / 2 - 20,
+                                                height:
+                                                    (mediaHeight * 0.529 / 2) /
+                                                        1.5,
+                                              ),
+                                              SizedBox(
+                                                height:
+                                                    mediaHeight * 0.3 * 0.01,
+                                              ),
+                                              Row(children: [
+                                                Text(homeScreenController
+                                                    .postsList[(j % 2 + i * 2)]
+                                                    .subCategory
+                                                    .toUpperCase()),
+                                                Expanded(child: SizedBox()),
+                                                Obx(
+                                                  () => homeScreenController
+                                                              .featuredDeals[
+                                                                  (j % 2 +
+                                                                      i * 2)]
+                                                              .favorited ==
+                                                          false
+                                                      ? InkWell(
+                                                          onTap: () {
+                                                            print(
+                                                                'button pressed1');
+                                                            int index =
+                                                                j % 2 + i * 2;
+                                                            FeaturedDeals
+                                                                likedAdd =
+                                                                homeScreenController
+                                                                        .featuredDeals[
+                                                                    index];
 
-                                                    homeScreenController
-                                                        .addToFavorites(index);
-                                                    myAddsController
-                                                        .addToFavourites(
-                                                            likedAdd);
-                                                  },
-                                                  child: Icon(
-                                                      Icons.favorite_border))
-                                              : InkWell(
-                                                  onTap: () {
-                                                    int index = j % 2 + i * 2;
-                                                    print(
-                                                        'button pressed1 index is $index');
+                                                            homeScreenController
+                                                                .addToFavorites(
+                                                                    index);
+                                                            myAddsController
+                                                                .addToFavourites(
+                                                                    likedAdd);
+                                                          },
+                                                          child: Icon(Icons
+                                                              .favorite_border))
+                                                      : InkWell(
+                                                          onTap: () {
+                                                            int index =
+                                                                j % 2 + i * 2;
+                                                            print(
+                                                                'button pressed1 index is $index');
 
-                                                    FeaturedDeals likedAdd =
-                                                        homeScreenController
-                                                                .featuredDeals[
-                                                            index];
-                                                    homeScreenController
-                                                        .addToFavorites(index);
-                                                    myAddsController
-                                                        .removeFromFavouritesUsingHomeScreen(
-                                                            likedAdd.id);
-                                                  },
-                                                  child: Icon(
-                                                    Icons.favorite,
-                                                    color: Colors.red,
-                                                  ),
+                                                            FeaturedDeals
+                                                                likedAdd =
+                                                                homeScreenController
+                                                                        .featuredDeals[
+                                                                    index];
+                                                            homeScreenController
+                                                                .addToFavorites(
+                                                                    index);
+                                                            myAddsController
+                                                                .removeFromFavouritesUsingHomeScreen(
+                                                                    likedAdd
+                                                                        .id);
+                                                          },
+                                                          child: Icon(
+                                                            Icons.favorite,
+                                                            color: Colors.red,
+                                                          ),
+                                                        ),
                                                 ),
+                                              ]),
+                                              SizedBox(
+                                                height:
+                                                    mediaHeight * 0.3 * 0.02,
+                                              ),
+                                              Text(
+                                                'Rs ${homeScreenController.postsList[(j % 2 + i * 2)].price.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              SizedBox(
+                                                height:
+                                                    mediaHeight * 0.3 * 0.01,
+                                              ),
+                                              Expanded(
+                                                child: Text(
+                                                  '📍${homeScreenController.postsList[(j % 2 + i * 2)].address}',
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style:
+                                                      TextStyle(fontSize: 12),
+                                                ),
+                                              ),
+                                              // Row(children: [
+
+                                              //   Text(
+                                              //     '18 May',
+                                              //     style:
+                                              //         TextStyle(fontSize: 12),
+                                              //   )
+                                              // ]),
+                                            ],
+                                          ),
                                         ),
-                                      ]),
-                                      SizedBox(
-                                        height: mediaHeight * 0.3 * 0.02,
                                       ),
-                                      Text(
-                                        'Rs ${homeScreenController.featuredDeals[(j % 2 + i * 2)].price}',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      SizedBox(
-                                        height: mediaHeight * 0.3 * 0.01,
-                                      ),
-                                      Row(children: [
-                                        Text(
-                                          'Faisal Town, Lahore',
-                                          style: TextStyle(fontSize: 12),
-                                        ),
-                                        Expanded(child: SizedBox()),
-                                        Text(
-                                          '18 May',
-                                          style: TextStyle(fontSize: 12),
-                                        )
-                                      ]),
-                                    ],
-                                  ),
+                                  ],
                                 ),
-                              ),
-                          ],
-                        ),
+                              )
+                            : SizedBox(),
                       )
-                  ]),
-                ),
-              ),
+                  ],
+                )),
+              )
             ]),
           )),
     );
