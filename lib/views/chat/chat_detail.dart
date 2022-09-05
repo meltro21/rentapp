@@ -152,8 +152,9 @@ class _ChatDetailState extends State<ChatDetail> {
                       width: 15,
                     ),
                     FloatingActionButton(
-                      onPressed: () {
+                      onPressed: () async {
                         chatController.sendMessage();
+                        //await chatController.getLatestMessagess();
                       },
                       child: Icon(
                         Icons.send,

@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:rentapp/controllers/chat_controller.dart';
 import 'package:rentapp/models/posts_model.dart';
 import 'package:rentapp/views/chat/chat_detail.dart';
 
@@ -13,6 +15,7 @@ class ChatHome extends StatefulWidget {
 }
 
 class _ChatHomeState extends State<ChatHome> {
+  ChatController chatController = Get.put(ChatController());
   List<ChatUsers> chatUsers = [
     ChatUsers(
       name: 'Usama',
@@ -77,89 +80,34 @@ class _ChatHomeState extends State<ChatHome> {
               ),
             ),
             //List
-            ListView.builder(
-              itemCount: chatUsers.length,
-              shrinkWrap: true,
-              padding: EdgeInsets.only(top: 16),
-              physics: NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                return GestureDetector(
-                  onTap: () {
-                    Get.to(ChatDetail(
-                      postDetails: PostsModel.empty(),
-                    ));
-                  },
-                  child: Container(
-                    padding: EdgeInsets.only(
-                        left: 16, right: 16, top: 10, bottom: 10),
-                    child: Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Row(
-                            children: <Widget>[
-                              CircleAvatar(
-                                backgroundImage: AssetImage(
-                                  chatUsers[index].imageURL,
-                                ),
-                                maxRadius: 30,
-                              ),
-                              // Container(
-                              //   height: 50,
-                              //   width: 50,
-                              //   child: ClipOval(
-                              //       child: Image.asset(
-                              //     chatUsers[index].imageURL,
-                              //     fit: BoxFit.fill,
-                              //     width: 60.0,
-                              //     height: 60.0,
-                              //   )),
-                              // ),
-                              SizedBox(
-                                width: 16,
-                              ),
-                              Expanded(
-                                child: Container(
-                                  color: Colors.transparent,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        chatUsers[index].name,
-                                        style: TextStyle(fontSize: 16),
-                                      ),
-                                      SizedBox(
-                                        height: 6,
-                                      ),
-                                      Text(
-                                        chatUsers[index].messageText,
-                                        style: TextStyle(
-                                            fontSize: 13,
-                                            color: Colors.grey.shade600,
-                                            fontWeight: false
-                                                ? FontWeight.bold
-                                                : FontWeight.normal),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Text(
-                          chatUsers[index].time,
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight:
-                                  false ? FontWeight.bold : FontWeight.normal),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
+            StreamBuilder(
+                stream: chatController.getLatestMessages(),
+                builder: ((context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                    print('data is ${snapshot.data!.docs.length}');
+                    return ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      shrinkWrap: true,
+                      padding: EdgeInsets.only(top: 16),
+                      physics: NeverScrollableScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        return chatController.userId ==
+                                snapshot.data!.docs[index]['from']
+                            ? Container(
+                                alignment: Alignment.topLeft,
+                                child:
+                                    Text(snapshot.data!.docs[index]['message']))
+                            : Container(
+                                alignment: Alignment.topLeft,
+                                child: Text('Hello'));
+                      },
+                    );
+                  } else {
+                    return SizedBox(
+                      child: Text('No Data'),
+                    );
+                  }
+                })),
           ],
         ),
       ),

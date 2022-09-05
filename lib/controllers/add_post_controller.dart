@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 class AddPostController extends GetxController {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseStorage _firebaseStorage = FirebaseStorage.instance;
+  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   RxList<AutocompletePrediction> predictions = <AutocompletePrediction>[].obs;
 
   TextEditingController priceController = TextEditingController();
@@ -19,6 +21,7 @@ class AddPostController extends GetxController {
   var address = ''.obs;
   double? lat = 0.0;
   double? lng = 0.0;
+  String userId = '';
 
   late GooglePlace googlePlace;
 
@@ -70,6 +73,7 @@ class AddPostController extends GetxController {
 
   void addPost() async {
     DateTime createdAt = DateTime.now();
+    userId = _firebaseAuth.currentUser!.uid;
     List<String> urlList = [];
     try {
       var post = await _firestore.collection('Posts').add({
@@ -81,7 +85,8 @@ class AddPostController extends GetxController {
         'createdAt': createdAt,
         'address': address.value,
         'lat': lat,
-        'lng': lng
+        'lng': lng,
+        'userId': userId
       });
       try {
         await _firestore

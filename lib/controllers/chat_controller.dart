@@ -15,9 +15,7 @@ class ChatController extends GetxController {
     String fromId = userId;
     String toId = postDetails.userId;
     String postId = postDetails.id;
-    return _firebaseFirestore
-        .collection('Chats/$fromId/$toId/$postId/posts')
-        .snapshots();
+    return _firebaseFirestore.collection('Chats/$fromId/$toId').snapshots();
   }
 
   sendMessage() async {
@@ -25,27 +23,38 @@ class ChatController extends GetxController {
     String toId = postDetails.userId;
     String postId = postDetails.id;
     String path = 'Chats/$fromId/$toId/$postId';
-    print(userId);
-    print(postDetails.userId);
-    print(postDetails.id);
+    print('from user id is $userId');
+    print('to user id is ${postDetails.userId}');
+    print('post id is ${postDetails.id}');
     print('final is ${path}');
     try {
-      await _firebaseFirestore
-          .collection('Chats/$fromId/$toId/$postId/posts')
-          .add({
+      await _firebaseFirestore.collection('Chats/$fromId/$toId').add({
         'to': postDetails.userId,
         'from': userId,
         'createdAt': DateTime.now(),
         'message': messageController.text
       });
-      await _firebaseFirestore
-          .collection('Chats/$toId/$fromId/$postId/posts')
-          .add({
+      await _firebaseFirestore.collection('Chats/$toId/$fromId').add({
+        'to': userId,
+        'from': postDetails.userId,
+        'createdAt': DateTime.now(),
+        'message': messageController.text
+      });
+      //latest-message
+      await _firebaseFirestore.collection('NewMessages/$fromId').doc(toId).set({
         'to': postDetails.userId,
         'from': userId,
         'createdAt': DateTime.now(),
         'message': messageController.text
       });
+
+      await _firebaseFirestore.collection('NewMessages/$toId').doc(fromId).set({
+        'to': userId,
+        'from': postDetails.userId,
+        'createdAt': DateTime.now(),
+        'message': messageController.text
+      });
+
       // _firebaseFirestore
       //     .collection("/Chats").doc(fromId).collection(toId)
       //     .add({
@@ -57,5 +66,20 @@ class ChatController extends GetxController {
     } catch (err) {
       print('Send Message error is $err');
     }
+  }
+
+  Stream<QuerySnapshot> getLatestMessages() {
+    String fromId = userId;
+
+    return _firebaseFirestore.collection('NewMessages/').snapshots();
+  }
+
+  Future<void> getLatestMessagess() async {
+    String fromId = userId;
+    print('in');
+    var a = await _firebaseFirestore.collection('NewMessages').get();
+    a.docs.forEach((element) {
+      print(element.id);
+    });
   }
 }
