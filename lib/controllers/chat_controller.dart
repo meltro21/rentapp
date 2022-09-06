@@ -40,20 +40,58 @@ class ChatController extends GetxController {
         'createdAt': DateTime.now(),
         'message': messageController.text
       });
-      //latest-message
-      await _firebaseFirestore.collection('NewMessages/$fromId').doc(toId).set({
-        'to': postDetails.userId,
-        'from': userId,
-        'createdAt': DateTime.now(),
-        'message': messageController.text
-      });
 
-      await _firebaseFirestore.collection('NewMessages/$toId').doc(fromId).set({
-        'to': userId,
-        'from': postDetails.userId,
-        'createdAt': DateTime.now(),
-        'message': messageController.text
-      });
+      var a = await _firebaseFirestore
+          .collection('NewMessages')
+          .where('from', isEqualTo: userId)
+          .where('to', isEqualTo: postDetails.userId)
+          .get();
+      if (a.docs.isEmpty) {
+        _firebaseFirestore.collection('NewMessages').add({
+          'to': userId,
+          'from': postDetails.userId,
+          'createdAt': DateTime.now(),
+          'message': messageController.text
+        });
+        _firebaseFirestore.collection('NewMessages').add({
+          'to': postDetails.userId,
+          'from': userId,
+          'createdAt': DateTime.now(),
+          'message': messageController.text
+        });
+      } else {
+        _firebaseFirestore.collection('NewMessages').doc(a.docs[0].id).update({
+          'to': userId,
+          'from': postDetails.userId,
+          'createdAt': DateTime.now(),
+          'message': messageController.text
+        });
+        _firebaseFirestore.collection('NewMessages').doc(a.docs[0].id).update({
+          'to': postDetails.userId,
+          'from': userId,
+          'createdAt': DateTime.now(),
+          'message': messageController.text
+        });
+      }
+
+      // //latest-message
+      // await _firebaseFirestore.collection('NewMessages').doc(fromId).set({
+      //   '$toId': {
+      //     'to': postDetails.userId,
+      //     'from': userId,
+      //     'createdAt': DateTime.now(),
+      //     'message': messageController.text
+      //   }
+      // });
+
+      // await _firebaseFirestore.collection('NewMessages').doc(toId).set({
+      //   '$fromId': {
+      //     'to': userId,
+      //     'from': postDetails.userId,
+      //     'createdAt': DateTime.now(),
+      //     'message': messageController.text
+      //   }
+      // });
 
       // _firebaseFirestore
       //     .collection("/Chats").doc(fromId).collection(toId)
@@ -71,15 +109,15 @@ class ChatController extends GetxController {
   Stream<QuerySnapshot> getLatestMessages() {
     String fromId = userId;
 
-    return _firebaseFirestore.collection('NewMessages/').snapshots();
+    return _firebaseFirestore
+        .collection('NewMessages/')
+        .where('from', isEqualTo: userId)
+        .snapshots();
   }
 
   Future<void> getLatestMessagess() async {
-    String fromId = userId;
-    print('in');
-    var a = await _firebaseFirestore.collection('NewMessages').get();
-    a.docs.forEach((element) {
-      print(element.id);
-    });
+    // String fromId = userId;
+    // print('in');
+    // var a = _firebaseFirestore.collection('NewMessages').doc(userId);
   }
 }

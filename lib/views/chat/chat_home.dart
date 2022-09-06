@@ -84,24 +84,23 @@ class _ChatHomeState extends State<ChatHome> {
                 stream: chatController.getLatestMessages(),
                 builder: ((context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasData) {
-                    print('data is ${snapshot.data!.docs.length}');
                     return ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      shrinkWrap: true,
-                      padding: EdgeInsets.only(top: 16),
-                      physics: NeverScrollableScrollPhysics(),
-                      itemBuilder: (context, index) {
-                        return chatController.userId ==
-                                snapshot.data!.docs[index]['from']
-                            ? Container(
+                        itemCount: snapshot.data!.docs.length,
+                        shrinkWrap: true,
+                        padding: EdgeInsets.only(top: 16),
+                        physics: NeverScrollableScrollPhysics(),
+                        itemBuilder: (context, index) {
+                          return InkWell(
+                            onTap: (() {
+                              Get.to(
+                                  ChatDetail(postDetails: PostsModel.empty()));
+                            }),
+                            child: Container(
                                 alignment: Alignment.topLeft,
-                                child:
-                                    Text(snapshot.data!.docs[index]['message']))
-                            : Container(
-                                alignment: Alignment.topLeft,
-                                child: Text('Hello'));
-                      },
-                    );
+                                child: Text(
+                                    snapshot.data!.docs[index]['message'])),
+                          );
+                        });
                   } else {
                     return SizedBox(
                       child: Text('No Data'),
