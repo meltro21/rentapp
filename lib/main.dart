@@ -1,6 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:rentapp/controllers/user_info_controller.dart';
 import 'package:rentapp/views/addPost/addPost.dart';
 import 'package:rentapp/views/authentication/login.dart';
 import 'package:rentapp/views/authentication/register.dart';
@@ -26,7 +28,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: MyHomePage());
+        home: LoginScreen());
   }
 }
 
@@ -39,6 +41,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 0;
+  UserInfoController userInfoController = Get.put(UserInfoController());
   List<Widget> widgetOptions = [
     HomeScreen(),
     MyAds(),
@@ -46,6 +49,13 @@ class _MyHomePageState extends State<MyHomePage> {
     ChatHome(),
     Profile()
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    userInfoController.getUserInof();
+  }
 
   @override
   Widget build(BuildContext context) {

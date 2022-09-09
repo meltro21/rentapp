@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:rentapp/controllers/add_detail_controller.dart';
+import 'package:rentapp/controllers/user_info_controller.dart';
 import 'package:rentapp/models/posts_model.dart';
 import 'package:rentapp/views/chat/chat_detail.dart';
 import 'package:rentapp/views/home/maps.dart';
@@ -17,6 +18,7 @@ class AddDetailHome extends StatefulWidget {
 
 class _AddDetailHomeState extends State<AddDetailHome> {
   AddDetailController addDetailController = Get.put(AddDetailController());
+  UserInfoController userInfoController = Get.find();
   int currentPic = 1;
 
   late ScrollController _controller;
@@ -67,6 +69,7 @@ class _AddDetailHomeState extends State<AddDetailHome> {
     // TODO: implement initState
 
     super.initState();
+    userInfoController.getPostUserAllData(widget.postDetails.userId);
     _controller = ScrollController();
     addDetailController.getCurrentUser();
   }
@@ -342,7 +345,9 @@ class _AddDetailHomeState extends State<AddDetailHome> {
                     //Chat
                     InkWell(
                       onTap: () {
-                        Get.to(ChatDetail(postDetails: widget.postDetails));
+                        Get.to(ChatDetail(
+                          toId: widget.postDetails.userId,
+                        ));
                       },
                       child: Container(
                         height: mediaHeight * 0.06,

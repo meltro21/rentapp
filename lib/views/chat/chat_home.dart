@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:rentapp/controllers/chat_controller.dart';
+import 'package:rentapp/controllers/user_info_controller.dart';
 import 'package:rentapp/models/posts_model.dart';
 import 'package:rentapp/views/chat/chat_detail.dart';
 
@@ -16,6 +17,7 @@ class ChatHome extends StatefulWidget {
 
 class _ChatHomeState extends State<ChatHome> {
   ChatController chatController = Get.put(ChatController());
+  UserInfoController userInfoController = Get.find();
   List<ChatUsers> chatUsers = [
     ChatUsers(
       name: 'Usama',
@@ -92,13 +94,41 @@ class _ChatHomeState extends State<ChatHome> {
                         itemBuilder: (context, index) {
                           return InkWell(
                             onTap: (() {
-                              Get.to(
-                                  ChatDetail(postDetails: PostsModel.empty()));
+                              Get.to(ChatDetail(
+                                toId: snapshot.data!.docs[index]['to'],
+                              ));
                             }),
                             child: Container(
-                                alignment: Alignment.topLeft,
-                                child: Text(
-                                    snapshot.data!.docs[index]['message'])),
+                              margin: EdgeInsets.only(left: 10, bottom: 10),
+                              alignment: Alignment.topLeft,
+                              child: Row(children: [
+                                Container(
+                                  height: 50,
+                                  width: 50,
+                                  child: CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage: AssetImage(
+                                        'assets/images/person1.jpeg'),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        snapshot.data!.docs[index]
+                                            ['toUserName'],
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      Text(
+                                          snapshot.data!.docs[index]['message'])
+                                    ]),
+                              ]),
+                            ),
                           );
                         });
                   } else {

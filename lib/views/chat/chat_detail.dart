@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:rentapp/controllers/chat_controller.dart';
+import 'package:rentapp/controllers/user_info_controller.dart';
 import 'package:rentapp/models/posts_model.dart';
 
 class ChatDetail extends StatefulWidget {
-  PostsModel postDetails;
-  ChatDetail({Key? key, required this.postDetails}) : super(key: key);
+  // PostsModel postDetails;
+
+  String toId;
+  ChatDetail({Key? key, required this.toId}) : super(key: key);
 
   @override
   State<ChatDetail> createState() => _ChatDetailState();
@@ -16,15 +19,19 @@ class ChatDetail extends StatefulWidget {
 class _ChatDetailState extends State<ChatDetail> {
   ChatController chatController = Get.put(ChatController());
   FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
+  UserInfoController userInfoController = Get.find();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    chatController.postDetails = widget.postDetails;
+    userInfoController.getPostUserAllData(widget.toId);
+    //chatController.postDetails = widget.postDetails;
   }
 
   @override
   Widget build(BuildContext context) {
+    var mediaHeight = MediaQuery.of(context).size.height;
+    var mediaWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -88,7 +95,7 @@ class _ChatDetailState extends State<ChatDetail> {
         child: Stack(
           children: <Widget>[
             StreamBuilder(
-                stream: chatController.getMessages(),
+                stream: chatController.getMessages(widget.toId),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasData) {
                     return ListView.builder(
@@ -97,14 +104,34 @@ class _ChatDetailState extends State<ChatDetail> {
                           return chatController.userId ==
                                   snapshot.data!.docs[index]['from']
                               ? Container(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                      snapshot.data!.docs[index]['message']),
+                                  margin: EdgeInsets.only(right: 5, bottom: 5),
+                                  alignment: Alignment.topRight,
+                                  child: Container(
+                                    padding: EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      color: Colors.lightBlue,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Text(
+                                      snapshot.data!.docs[index]['message'],
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
                                 )
                               : Container(
-                                  alignment: Alignment.topRight,
-                                  child: Text(
-                                      snapshot.data!.docs[index]['message']),
+                                  margin: EdgeInsets.only(left: 5, bottom: 5),
+                                  alignment: Alignment.topLeft,
+                                  child: Container(
+                                    padding: EdgeInsets.all(5),
+                                    decoration: BoxDecoration(
+                                      color: Colors.lightBlue,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Text(
+                                      snapshot.data!.docs[index]['message'],
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
                                 );
                         });
                   } else {
@@ -153,7 +180,7 @@ class _ChatDetailState extends State<ChatDetail> {
                     ),
                     FloatingActionButton(
                       onPressed: () async {
-                        chatController.sendMessage();
+                        chatController.sendMessage(widget.toId);
                         //await chatController.getLatestMessagess();
                       },
                       child: Icon(
