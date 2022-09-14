@@ -14,18 +14,37 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  AuthController authController = Get.find();
+  //AuthController authController = Get.find();
   @override
   Widget build(BuildContext context) {
+    var mediaHeight = MediaQuery.of(context).size.height;
+    var mediaWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      body: Container(child: RaisedButton(
-        onPressed: (() async {
-          var logOut = await authController.logout();
-          if (logOut == true) {
-            Get.off(LoginScreen());
-          }
-        }),
-      )),
+      body: SafeArea(
+        child: Container(
+          margin: EdgeInsets.only(left: 10, right: 10),
+          //child: RaisedButton(
+          //   onPressed: (() async {
+          //     // var logOut = await authController.logout();
+          //     // if (logOut == true) {
+          //     //   Get.off(LoginScreen());
+          //     // }
+          //   }),
+          child: Column(children: [
+            //profile seciton
+            Container(
+              height: mediaHeight * 0.1,
+              width: mediaWidth,
+              child: Row(children: [
+                CircleAvatar(
+                  backgroundImage: AssetImage("assets/images/person1.jpeg"),
+                  maxRadius: 30,
+                ),
+              ]),
+            ),
+          ]),
+        ),
+      ),
     );
   }
 }

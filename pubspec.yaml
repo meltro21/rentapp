@@ -49,6 +49,7 @@ dependencies:
   firebase_auth: ^3.3.5
   google_maps_flutter: ^2.1.2
   loading_overlay: ^0.3.0
+  cached_network_image: ^3.2.1
 
 
   

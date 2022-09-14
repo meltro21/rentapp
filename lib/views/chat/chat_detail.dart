@@ -67,7 +67,7 @@ class _ChatDetailState extends State<ChatDetail> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        "Kriss Benwat",
+                        userInfoController.postUserInfo.name,
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.w600),
                       ),

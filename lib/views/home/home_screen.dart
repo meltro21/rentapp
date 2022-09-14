@@ -39,6 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
           margin: EdgeInsets.only(left: 10, right: 10),
           //Column
           child: SingleChildScrollView(
+            physics: ScrollPhysics(),
             child: Column(children: [
               //search Container
               Container(
@@ -218,52 +219,60 @@ class _HomeScreenState extends State<HomeScreen> {
                               Expanded(
                                 child: SizedBox(),
                               ),
-                              Container(
-                                margin: EdgeInsets.only(right: 5, top: 5),
-                                child: Text(
-                                  'view all',
-                                  style: TextStyle(
-                                    color: Colors.purple,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(right: 20, top: 5),
-                                child: Transform.rotate(
-                                  angle: 180 * math.pi / 180,
-                                  child: Icon(
-                                    Icons.arrow_back_ios,
-                                    size: 12,
-                                    color: Colors.pink,
-                                  ),
-                                ),
-                              ),
+                              // Container(
+                              //   margin: EdgeInsets.only(right: 5, top: 5),
+                              //   child: Text(
+                              //     'view all',
+                              //     style: TextStyle(
+                              //       color: Colors.purple,
+                              //       fontWeight: FontWeight.bold,
+                              //     ),
+                              //   ),
+                              // ),
+                              // Container(
+                              //   margin: EdgeInsets.only(right: 20, top: 5),
+                              //   child: Transform.rotate(
+                              //     angle: 180 * math.pi / 180,
+                              //     child: Icon(
+                              //       Icons.arrow_back_ios,
+                              //       size: 12,
+                              //       color: Colors.pink,
+                              //     ),
+                              //   ),
+                              // ),
                             ]),
                           ]),
                     ),
                     //list of adds rows
-
-                    for (int i = 0; i < 2; i++)
-                      Obx(
-                        () => homeScreenController.loading.value == true
-                            ? Container(
-                                margin: EdgeInsets.only(top: 5),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    for (int j = 0; j < 2; j++)
+                    Obx(
+                      () => homeScreenController.loading.value == false
+                          ? GridView.builder(
+                              physics: NeverScrollableScrollPhysics(),
+                              itemCount: homeScreenController.postsList.length,
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                childAspectRatio: 1 / 1.2,
+                                crossAxisCount: 2,
+                              ),
+                              itemBuilder: ((context, index) {
+                                return Container(
+                                  margin: EdgeInsets.only(top: 5),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      // for (int j = 0; j < 2; j++)
                                       InkWell(
                                         onTap: () {
                                           Get.to(AddDetailHome(
                                             postDetails: homeScreenController
-                                                .postsList[(j % 2 + i * 2)],
+                                                .postsList[(index)],
                                           ));
                                         },
                                         child: Container(
                                           height:
-                                              mediaHeight * 0.529 / 1.7 - 30,
+                                              mediaHeight * 0.529 / 1.6 - 30,
                                           width: mediaWidth / 2 - 20,
                                           padding: EdgeInsets.only(left: 10),
                                           decoration: BoxDecoration(
@@ -277,7 +286,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             children: [
                                               Image.network(
                                                 homeScreenController
-                                                    .postsList[(j % 2 + i * 2)]
+                                                    .postsList[(index)]
                                                     .imagesUrl[0],
                                                 fit: BoxFit.fill,
                                                 width: mediaWidth / 2 - 20,
@@ -291,57 +300,61 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ),
                                               Row(children: [
                                                 Text(homeScreenController
-                                                    .postsList[(j % 2 + i * 2)]
+                                                    .postsList[(index)]
                                                     .subCategory
                                                     .toUpperCase()),
                                                 Expanded(child: SizedBox()),
                                                 Obx(
                                                   () => homeScreenController
-                                                              .featuredDeals[
-                                                                  (j % 2 +
-                                                                      i * 2)]
-                                                              .favorited ==
+                                                                  .favorites[
+                                                              index] ==
                                                           false
                                                       ? InkWell(
                                                           onTap: () {
-                                                            print(
-                                                                'button pressed1');
-                                                            int index =
-                                                                j % 2 + i * 2;
-                                                            FeaturedDeals
-                                                                likedAdd =
-                                                                homeScreenController
-                                                                        .featuredDeals[
-                                                                    index];
+                                                            // print(
+                                                            //     'button pressed1');
+                                                            // int index =
+
+                                                            // FeaturedDeals
+                                                            //     likedAdd =
+                                                            //     homeScreenController
+                                                            //             .featuredDeals[
+                                                            //         index];
+
+                                                            // homeScreenController
+                                                            //     .addToFavorites(
+                                                            //         index);
+                                                            // myAddsController
+                                                            //     .addToFavourites(
+                                                            //         likedAdd);
 
                                                             homeScreenController
-                                                                .addToFavorites(
-                                                                    index);
-                                                            myAddsController
-                                                                .addToFavourites(
-                                                                    likedAdd);
+                                                                .addTo(index);
                                                           },
                                                           child: Icon(Icons
                                                               .favorite_border))
                                                       : InkWell(
                                                           onTap: () {
-                                                            int index =
-                                                                j % 2 + i * 2;
-                                                            print(
-                                                                'button pressed1 index is $index');
+                                                            // int index =
+                                                            //     j % 2 + i * 2;
+                                                            // print(
+                                                            //     'button pressed1 index is $index');
 
-                                                            FeaturedDeals
-                                                                likedAdd =
-                                                                homeScreenController
-                                                                        .featuredDeals[
-                                                                    index];
+                                                            // FeaturedDeals
+                                                            //     likedAdd =
+                                                            //     homeScreenController
+                                                            //             .featuredDeals[
+                                                            //         index];
+                                                            // homeScreenController
+                                                            //     .addToFavorites(
+                                                            //         index);
+                                                            // myAddsController
+                                                            //     .removeFromFavouritesUsingHomeScreen(
+                                                            //         likedAdd
+                                                            //             .id);
                                                             homeScreenController
-                                                                .addToFavorites(
+                                                                .removeTo(
                                                                     index);
-                                                            myAddsController
-                                                                .removeFromFavouritesUsingHomeScreen(
-                                                                    likedAdd
-                                                                        .id);
                                                           },
                                                           child: Icon(
                                                             Icons.favorite,
@@ -355,7 +368,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     mediaHeight * 0.3 * 0.02,
                                               ),
                                               Text(
-                                                'Rs ${homeScreenController.postsList[(j % 2 + i * 2)].price.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
+                                                'Rs ${homeScreenController.postsList[(index)].price.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
                                                 style: TextStyle(
                                                     fontWeight:
                                                         FontWeight.bold),
@@ -366,7 +379,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ),
                                               Expanded(
                                                 child: Text(
-                                                  '📍${homeScreenController.postsList[(j % 2 + i * 2)].address}',
+                                                  '📍${homeScreenController.postsList[(index)].address}',
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   style:
@@ -385,11 +398,164 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                         ),
                                       ),
-                                  ],
-                                ),
-                              )
-                            : SizedBox(),
-                      )
+                                    ],
+                                  ),
+                                );
+                              }))
+                          : SizedBox(),
+                    )
+
+                    // for (int i = 0; i < 2; i++)
+                    //   Obx(
+                    //     () => homeScreenController.loading.value == false
+                    //         ? Container(
+                    //             margin: EdgeInsets.only(top: 5),
+                    //             child: Row(
+                    //               mainAxisAlignment:
+                    //                   MainAxisAlignment.spaceEvenly,
+                    //               children: [
+                    //                 for (int j = 0; j < 2; j++)
+                    //                   InkWell(
+                    //                     onTap: () {
+                    //                       Get.to(AddDetailHome(
+                    //                         postDetails: homeScreenController
+                    //                             .postsList[(j % 2 + i * 2)],
+                    //                       ));
+                    //                     },
+                    //                     child: Container(
+                    //                       height:
+                    //                           mediaHeight * 0.529 / 1.7 - 30,
+                    //                       width: mediaWidth / 2 - 20,
+                    //                       padding: EdgeInsets.only(left: 10),
+                    //                       decoration: BoxDecoration(
+                    //                         color: Colors.grey[200],
+                    //                         borderRadius:
+                    //                             BorderRadius.circular(10),
+                    //                       ),
+                    //                       child: Column(
+                    //                         crossAxisAlignment:
+                    //                             CrossAxisAlignment.start,
+                    //                         children: [
+                    //                           Image.network(
+                    //                             homeScreenController
+                    //                                 .postsList[(j % 2 + i * 2)]
+                    //                                 .imagesUrl[0],
+                    //                             fit: BoxFit.fill,
+                    //                             width: mediaWidth / 2 - 20,
+                    //                             height:
+                    //                                 (mediaHeight * 0.529 / 2) /
+                    //                                     1.5,
+                    //                           ),
+                    //                           SizedBox(
+                    //                             height:
+                    //                                 mediaHeight * 0.3 * 0.01,
+                    //                           ),
+                    //                           Row(children: [
+                    //                             Text(homeScreenController
+                    //                                 .postsList[(j % 2 + i * 2)]
+                    //                                 .subCategory
+                    //                                 .toUpperCase()),
+                    //                             Expanded(child: SizedBox()),
+                    //                             Obx(
+                    //                               () => homeScreenController
+                    //                                           .featuredDeals[
+                    //                                               (j % 2 +
+                    //                                                   i * 2)]
+                    //                                           .favorited ==
+                    //                                       false
+                    //                                   ? InkWell(
+                    //                                       onTap: () {
+                    //                                         print(
+                    //                                             'button pressed1');
+                    //                                         int index =
+                    //                                             j % 2 + i * 2;
+                    //                                         FeaturedDeals
+                    //                                             likedAdd =
+                    //                                             homeScreenController
+                    //                                                     .featuredDeals[
+                    //                                                 index];
+
+                    //                                         homeScreenController
+                    //                                             .addToFavorites(
+                    //                                                 index);
+                    //                                         myAddsController
+                    //                                             .addToFavourites(
+                    //                                                 likedAdd);
+                    //                                         homeScreenController
+                    //                                             .addTo(index);
+                    //                                       },
+                    //                                       child: Icon(Icons
+                    //                                           .favorite_border))
+                    //                                   : InkWell(
+                    //                                       onTap: () {
+                    //                                         int index =
+                    //                                             j % 2 + i * 2;
+                    //                                         print(
+                    //                                             'button pressed1 index is $index');
+
+                    //                                         FeaturedDeals
+                    //                                             likedAdd =
+                    //                                             homeScreenController
+                    //                                                     .featuredDeals[
+                    //                                                 index];
+                    //                                         homeScreenController
+                    //                                             .addToFavorites(
+                    //                                                 index);
+                    //                                         myAddsController
+                    //                                             .removeFromFavouritesUsingHomeScreen(
+                    //                                                 likedAdd
+                    //                                                     .id);
+                    //                                         homeScreenController
+                    //                                             .removeTo(
+                    //                                                 index);
+                    //                                       },
+                    //                                       child: Icon(
+                    //                                         Icons.favorite,
+                    //                                         color: Colors.red,
+                    //                                       ),
+                    //                                     ),
+                    //                             ),
+                    //                           ]),
+                    //                           SizedBox(
+                    //                             height:
+                    //                                 mediaHeight * 0.3 * 0.02,
+                    //                           ),
+                    //                           Text(
+                    //                             'Rs ${homeScreenController.postsList[(j % 2 + i * 2)].price.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
+                    //                             style: TextStyle(
+                    //                                 fontWeight:
+                    //                                     FontWeight.bold),
+                    //                           ),
+                    //                           SizedBox(
+                    //                             height:
+                    //                                 mediaHeight * 0.3 * 0.01,
+                    //                           ),
+                    //                           Expanded(
+                    //                             child: Text(
+                    //                               '📍${homeScreenController.postsList[(j % 2 + i * 2)].address}',
+                    //                               overflow:
+                    //                                   TextOverflow.ellipsis,
+                    //                               style:
+                    //                                   TextStyle(fontSize: 12),
+                    //                             ),
+                    //                           ),
+                    //                           // Row(children: [
+
+                    //                           //   Text(
+                    //                           //     '18 May',
+                    //                           //     style:
+                    //                           //         TextStyle(fontSize: 12),
+                    //                           //   )
+                    //                           // ]),
+                    //                         ],
+                    //                       ),
+                    //                     ),
+                    //                   ),
+                    //               ],
+                    //             ),
+                    //           )
+                    //         : SizedBox(),
+                    //  )
                   ],
                 )),
               )
