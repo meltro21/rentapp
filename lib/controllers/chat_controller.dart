@@ -11,8 +11,21 @@ class ChatController extends GetxController {
   String userId = FirebaseAuth.instance.currentUser!.uid;
   FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   late PostsModel postDetails;
+  TextEditingController amountController = TextEditingController();
+
   TextEditingController messageController = TextEditingController();
   UserInfoController userInfoController = Get.find();
+
+  var startDate = DateTime.now().obs;
+  var endDate = DateTime.now().obs;
+
+  changeStartDate(DateTime date) {
+    startDate.value = date;
+  }
+
+  changeEndDate(DateTime date) {
+    endDate.value = date;
+  }
 
   Stream<QuerySnapshot> getMessages(String toId) {
     String fromId = userId;
@@ -20,7 +33,7 @@ class ChatController extends GetxController {
     // String postId = postDetails.id;
     return _firebaseFirestore
         .collection('Chats/$fromId/$toId')
-        .orderBy('createdAt', descending: false)
+        .orderBy('createdAt', descending: true)
         .snapshots();
   }
 
@@ -62,13 +75,6 @@ class ChatController extends GetxController {
           'message': messageController.text,
           'toUserName': userInfoController.postUserInfo.name,
         });
-        // await _firebaseFirestore.collection('NewMessages').add({
-        //   'to': fromId,
-        //   'from': toId,
-        //   'createdAt': DateTime.now(),
-        //   'message': messageController.text,
-        //   'toUserName': userInfoController.userInfo.name,
-        // });
       } else {
         await _firebaseFirestore
             .collection('NewMessages')
@@ -80,16 +86,6 @@ class ChatController extends GetxController {
           'message': messageController.text,
           'toUserName': userInfoController.postUserInfo.name,
         });
-        // await _firebaseFirestore
-        //     .collection('NewMessages')
-        //     .doc(a.docs[0].id)
-        //     .update({
-        //   'to': fromId,
-        //   'from': toId,
-        //   'createdAt': DateTime.now(),
-        //   'message': messageController.text,
-        //   'toUserName': userInfoController.userInfo.name,
-        // });
       }
       a = await _firebaseFirestore
           .collection('NewMessages')
@@ -97,13 +93,6 @@ class ChatController extends GetxController {
           .where('from', isEqualTo: toId)
           .get();
       if (a.docs.isEmpty) {
-        // await _firebaseFirestore.collection('NewMessages').add({
-        //   'to': userId,
-        //   'from': toId,
-        //   'createdAt': DateTime.now(),
-        //   'message': messageController.text,
-        //   'toUserName': userInfoController.userInfo.name,
-        // });
         await _firebaseFirestore.collection('NewMessages').add({
           'to': fromId,
           'from': toId,
@@ -112,16 +101,6 @@ class ChatController extends GetxController {
           'toUserName': userInfoController.currentUserInfo.name,
         });
       } else {
-        // await _firebaseFirestore
-        //     .collection('NewMessages')
-        //     .doc(a.docs[0].id)
-        //     .update({
-        //   'to': userId,
-        //   'from': toId,
-        //   'createdAt': DateTime.now(),
-        //   'message': messageController.text,
-        //   'toUserName': userInfoController.userInfo.name,
-        // });
         await _firebaseFirestore
             .collection('NewMessages')
             .doc(a.docs[0].id)
@@ -135,34 +114,6 @@ class ChatController extends GetxController {
       }
 
       messageController.clear();
-
-      // //latest-message
-      // await _firebaseFirestore.collection('NewMessages').doc(fromId).set({
-      //   '$toId': {
-      //     'to': toId,
-      //     'from': userId,
-      //     'createdAt': DateTime.now(),
-      //     'message': messageController.text
-      //   }
-      // });
-
-      // await _firebaseFirestore.collection('NewMessages').doc(toId).set({
-      //   '$fromId': {
-      //     'to': userId,
-      //     'from': toId,
-      //     'createdAt': DateTime.now(),
-      //     'message': messageController.text
-      //   }
-      // });
-
-      // _firebaseFirestore
-      //     .collection("/Chats").doc(fromId).collection(toId)
-      //     .add({
-      //   'to': toId,
-      //   'from': userId,
-      //   'createdAt': DateTime.now(),
-      //   'message': messageController.text
-      // });
     } catch (err) {
       print('Send Message error is $err');
     }
@@ -177,9 +128,34 @@ class ChatController extends GetxController {
         .snapshots();
   }
 
-  Future<void> getLatestMessagess() async {
-    // String fromId = userId;
-    // print('in');
-    // var a = _firebaseFirestore.collection('NewMessages').doc(userId);
+  Future<void> submitRequest(String toId) async {
+    print('submit');
+    try {
+      await _firebaseFirestore.collection('Chats/$userId/$toId').add({
+        'to': toId,
+        'from': userId,
+        'createdAt': DateTime.now(),
+        'message': '1',
+        'startDate': startDate.toString(),
+        'endDate': endDate.toString(),
+        'amount': amountController.text
+      });
+    } catch (err) {
+      print('submit request error is $err');
+    }
+
+    try {
+      await _firebaseFirestore.collection('Chats/$toId/$userId').add({
+        'to': toId,
+        'from': userId,
+        'createdAt': DateTime.now(),
+        'message': '1',
+        'startDate': startDate.toString(),
+        'endDate': endDate.toString(),
+        'amount': amountController.text
+      });
+    } catch (err) {
+      print('submit request error is $err');
+    }
   }
 }

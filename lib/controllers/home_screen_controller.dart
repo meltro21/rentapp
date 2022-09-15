@@ -37,6 +37,8 @@ class HomeScreenController extends GetxController {
   ];
 
   getPosts() async {
+    postsList.clear();
+    favorites.clear();
     user = _firebaseAuth.currentUser!;
     userId = user.uid;
     loading.value = true;
@@ -145,5 +147,10 @@ class HomeScreenController extends GetxController {
     } catch (err) {
       print('remove to favorites error is $err');
     }
+  }
+
+  clearData() {
+    postsList.clear();
+    favorites.clear();
   }
 }

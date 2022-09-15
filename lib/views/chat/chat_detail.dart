@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import 'package:rentapp/controllers/chat_controller.dart';
 import 'package:rentapp/controllers/user_info_controller.dart';
 import 'package:rentapp/models/posts_model.dart';
@@ -17,15 +18,30 @@ class ChatDetail extends StatefulWidget {
 }
 
 class _ChatDetailState extends State<ChatDetail> {
+  DateTime selectedDate = DateTime.now();
+  String startDate = '';
+
   ChatController chatController = Get.put(ChatController());
   FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   UserInfoController userInfoController = Get.find();
+  ScrollController _scrollController = ScrollController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     userInfoController.getPostUserAllData(widget.toId);
     //chatController.postDetails = widget.postDetails;
+  }
+
+  // void _scrollDown() {
+  //   _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+  // }
+  void _scrollDown() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: Duration(seconds: 2),
+      curve: Curves.fastOutSlowIn,
+    );
   }
 
   @override
@@ -98,42 +114,119 @@ class _ChatDetailState extends State<ChatDetail> {
                 stream: chatController.getMessages(widget.toId),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasData) {
-                    return ListView.builder(
-                        itemCount: snapshot.data!.docs.length,
-                        itemBuilder: (context, index) {
-                          return chatController.userId ==
-                                  snapshot.data!.docs[index]['from']
-                              ? Container(
-                                  margin: EdgeInsets.only(right: 5, bottom: 5),
-                                  alignment: Alignment.topRight,
-                                  child: Container(
-                                    padding: EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      color: Colors.lightBlue,
-                                      borderRadius: BorderRadius.circular(5),
+                    return Container(
+                      margin: EdgeInsets.only(bottom: 60),
+                      child: ListView.builder(
+                          reverse: true,
+                          controller: _scrollController,
+                          itemCount: snapshot.data!.docs.length,
+                          itemBuilder: (context, index) {
+                            return snapshot.data!.docs[index]['message'] != "1"
+                                ? chatController.userId ==
+                                        snapshot.data!.docs[index]['from']
+                                    ? Container(
+                                        margin: EdgeInsets.only(
+                                            right: 5, bottom: 5),
+                                        alignment: Alignment.topRight,
+                                        child: Container(
+                                          padding: EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                            color: Colors.indigo.shade800,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: Text(
+                                            snapshot.data!.docs[index]
+                                                ['message'],
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        margin:
+                                            EdgeInsets.only(left: 5, bottom: 5),
+                                        alignment: Alignment.topLeft,
+                                        child: Container(
+                                          padding: EdgeInsets.all(5),
+                                          decoration: BoxDecoration(
+                                            color: Colors.lightBlue,
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                          ),
+                                          child: Text(
+                                            snapshot.data!.docs[index]
+                                                ['message'],
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                        ),
+                                      )
+                                :
+                                //if message type is request show this
+                                Container(
+                                    margin: EdgeInsets.only(bottom: 5),
+                                    height: mediaHeight * 0.2,
+                                    //color: Colors.red,
+                                    alignment: Alignment.center,
+                                    child: Container(
+                                      padding: EdgeInsets.only(top: 5, left: 5),
+                                      width: mediaWidth * 0.6,
+                                      color: Colors.grey[400],
+                                      child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Rent Request',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                              'Start Date : ${DateFormat('d MMM yyyy').format(DateTime.parse(snapshot.data!.docs[index]['startDate']))}',
+                                              style: TextStyle(),
+                                            ),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                                'End Date   : ${DateFormat('d MMM yyyy').format(DateTime.parse(snapshot.data!.docs[index]['startDate']))}'),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Text(
+                                                'Amount     : ${snapshot.data!.docs[index]['amount']}'),
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            primary:
+                                                                Colors.green),
+                                                    onPressed: () {},
+                                                    child: Text('Accept')),
+                                                ElevatedButton(
+                                                    style: ElevatedButton
+                                                        .styleFrom(
+                                                            primary: Colors
+                                                                .red[400]),
+                                                    onPressed: () {},
+                                                    child: Text('Reject')),
+                                              ],
+                                            )
+                                          ]),
                                     ),
-                                    child: Text(
-                                      snapshot.data!.docs[index]['message'],
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                )
-                              : Container(
-                                  margin: EdgeInsets.only(left: 5, bottom: 5),
-                                  alignment: Alignment.topLeft,
-                                  child: Container(
-                                    padding: EdgeInsets.all(5),
-                                    decoration: BoxDecoration(
-                                      color: Colors.lightBlue,
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: Text(
-                                      snapshot.data!.docs[index]['message'],
-                                      style: TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                );
-                        });
+                                  );
+                          }),
+                    );
                   } else {
                     return SizedBox();
                   }
@@ -148,7 +241,10 @@ class _ChatDetailState extends State<ChatDetail> {
                 child: Row(
                   children: <Widget>[
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        showBookingOption(mediaHeight, mediaWidth);
+                        print('Hello');
+                      },
                       child: Container(
                         height: 30,
                         width: 30,
@@ -168,7 +264,12 @@ class _ChatDetailState extends State<ChatDetail> {
                     ),
                     Expanded(
                       child: TextField(
+                        onTap: () {
+                          // print('Hello');
+                          // _scrollDown();
+                        },
                         controller: chatController.messageController,
+                        scrollPadding: EdgeInsets.only(bottom: 50),
                         decoration: InputDecoration(
                             hintText: "Write message...",
                             hintStyle: TextStyle(color: Colors.black54),
@@ -195,9 +296,173 @@ class _ChatDetailState extends State<ChatDetail> {
                 ),
               ),
             ),
-          ],
+          ].reversed.toList(),
         ),
       ),
     );
+  }
+
+  Future<void> _selectDate(BuildContext context, int dateType) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+        if (dateType == 1) {
+          chatController.changeStartDate(selectedDate);
+        } else {
+          chatController.changeEndDate(selectedDate);
+        }
+        print(chatController.startDate);
+        // startDate = selectedDate.toString();
+        // print('start date is $startDate');
+      });
+    }
+  }
+
+  showBookingOption(mediaHeight, mediaWidth) {
+    Get.bottomSheet(BottomSheet(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        onClosing: () {},
+        builder: (context) {
+          return StatefulBuilder(
+            builder: ((context, setState) {
+              return Container(
+                margin: EdgeInsets.only(left: 10),
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Container(
+                          margin: EdgeInsets.only(top: 10),
+                          child: Text(
+                            'Enter Details',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                        ),
+                      ),
+                      //Text('Amount/day'),
+                      TextField(
+                        controller: chatController.amountController,
+                        decoration: InputDecoration(
+                          label: Text('Amount/day'),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'Start Date',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          _selectDate(context, 1);
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(left: 30),
+                          padding: EdgeInsets.only(left: 5),
+                          height: mediaHeight * 0.06,
+                          width: mediaWidth / 3 + 20,
+                          decoration: BoxDecoration(
+                              border: Border.all(),
+                              borderRadius: BorderRadius.circular(10)),
+                          child: Row(children: [
+                            Obx(
+                              () => Text(DateFormat.yMMMd()
+                                  .format(chatController.startDate.value)),
+                            ),
+                            Icon(
+                              Icons.calendar_month,
+                              color: Color(0xffF4B755),
+                            ),
+                          ]),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'End Date',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          _selectDate(context, 2);
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(left: 30),
+                          padding: EdgeInsets.only(left: 5),
+                          height: mediaHeight * 0.06,
+                          width: mediaWidth / 3 + 20,
+                          decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Row(children: [
+                            Obx(
+                              () => Text(DateFormat.yMMMd()
+                                  .format(chatController.endDate.value)),
+                            ),
+                            Icon(
+                              Icons.calendar_month,
+                              color: Color(0xffF4B755),
+                            ),
+                          ]),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          chatController.submitRequest(widget.toId);
+                        },
+                        child: Center(
+                          child: Container(
+                            height: mediaHeight * 0.06,
+                            width: mediaWidth / 2 - 20,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Color(0xffF4B755)),
+                            margin: EdgeInsets.only(
+                                top: mediaHeight * 0.01,
+                                bottom: mediaHeight * 0.01),
+                            child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.send,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    width: mediaWidth * 0.02,
+                                  ),
+                                  Text(
+                                    'Submit Request',
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ]),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+          );
+        }));
   }
 }

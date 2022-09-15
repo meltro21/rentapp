@@ -30,6 +30,15 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    // print('in the disposne of homescreen');
+    // homeScreenController.clearData();
+
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var mediaHeight = MediaQuery.of(context).size.height;
     var mediaWidth = MediaQuery.of(context).size.width;
