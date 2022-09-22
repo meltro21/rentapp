@@ -49,6 +49,7 @@ class ChatController extends GetxController {
 
     try {
       await _firebaseFirestore.collection('Chats/$fromId/$toId').add({
+        'type': 'M',
         'to': toId,
         'from': fromId,
         'createdAt': DateTime.now(),
@@ -56,6 +57,7 @@ class ChatController extends GetxController {
       });
 
       await _firebaseFirestore.collection('Chats/$toId/$fromId').add({
+        'type': 'M',
         'to': toId,
         'from': fromId,
         'createdAt': DateTime.now(),
@@ -69,6 +71,7 @@ class ChatController extends GetxController {
           .get();
       if (a.docs.isEmpty) {
         await _firebaseFirestore.collection('NewMessages').add({
+          'type': 'M',
           'to': toId,
           'from': userId,
           'createdAt': DateTime.now(),
@@ -80,6 +83,7 @@ class ChatController extends GetxController {
             .collection('NewMessages')
             .doc(a.docs[0].id)
             .update({
+          'type': 'M',
           'to': toId,
           'from': userId,
           'createdAt': DateTime.now(),
@@ -94,6 +98,7 @@ class ChatController extends GetxController {
           .get();
       if (a.docs.isEmpty) {
         await _firebaseFirestore.collection('NewMessages').add({
+          'type': 'M',
           'to': fromId,
           'from': toId,
           'createdAt': DateTime.now(),
@@ -105,6 +110,7 @@ class ChatController extends GetxController {
             .collection('NewMessages')
             .doc(a.docs[0].id)
             .update({
+          'type': 'M',
           'to': fromId,
           'from': toId,
           'createdAt': DateTime.now(),
@@ -132,6 +138,24 @@ class ChatController extends GetxController {
     print('submit');
     try {
       await _firebaseFirestore.collection('Chats/$userId/$toId').add({
+        'type': 'R',
+        'to': toId,
+        'from': userId,
+        'createdAt': DateTime.now(),
+        'message': '1',
+        'startDate': startDate.toString(),
+        'endDate': endDate.toString(),
+        'amount': amountController.text,
+        'status': 'pending'
+      });
+    } catch (err) {
+      print('submit request error is $err');
+    }
+
+    try {
+      await _firebaseFirestore.collection('Chats/$toId/$userId').add({
+        'type': 'R',
+        'status': 'pending',
         'to': toId,
         'from': userId,
         'createdAt': DateTime.now(),
@@ -143,16 +167,42 @@ class ChatController extends GetxController {
     } catch (err) {
       print('submit request error is $err');
     }
+  }
 
+  Future<void> rejected(String toId, String docId) async {
     try {
-      await _firebaseFirestore.collection('Chats/$toId/$userId').add({
+      await _firebaseFirestore
+          .collection('Chats/$userId/$toId')
+          .doc(docId)
+          .update({
+        'type': 'R',
         'to': toId,
         'from': userId,
         'createdAt': DateTime.now(),
         'message': '1',
         'startDate': startDate.toString(),
         'endDate': endDate.toString(),
-        'amount': amountController.text
+        'amount': amountController.text,
+        'status': 'R'
+      });
+    } catch (err) {
+      print('submit request error is $err');
+    }
+
+    try {
+      await _firebaseFirestore
+          .collection('Chats/$toId/$userId')
+          .doc(docId)
+          .update({
+        'type': 'R',
+        'to': toId,
+        'from': userId,
+        'createdAt': DateTime.now(),
+        'message': '1',
+        'startDate': startDate.toString(),
+        'endDate': endDate.toString(),
+        'amount': amountController.text,
+        'status': 'R'
       });
     } catch (err) {
       print('submit request error is $err');
