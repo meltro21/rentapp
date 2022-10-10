@@ -1,7 +1,10 @@
+import 'dart:ui';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:rentapp/controllers/chat_controller.dart';
 import 'package:rentapp/controllers/user_info_controller.dart';
@@ -90,11 +93,6 @@ class _ChatDetailState extends State<ChatDetail> {
                       SizedBox(
                         height: 6,
                       ),
-                      Text(
-                        "Online",
-                        style: TextStyle(
-                            color: Colors.grey.shade600, fontSize: 13),
-                      ),
                     ],
                   ),
                 ),
@@ -135,12 +133,33 @@ class _ChatDetailState extends State<ChatDetail> {
                                             borderRadius:
                                                 BorderRadius.circular(5),
                                           ),
-                                          child: Text(
-                                            snapshot.data!.docs[index]
-                                                ['message'],
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
+                                          child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Flexible(
+                                                  child: Text(
+                                                    snapshot.data!.docs[index]
+                                                        ['message'],
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                ),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Flexible(
+                                                  child: Text(
+                                                      '${DateFormat.jm().format(snapshot.data!.docs[index]['createdAt'].toDate())}',
+                                                      textScaleFactor: 0.7,
+                                                      style: TextStyle(
+                                                        color: Colors.grey,
+                                                        fontFeatures: [
+                                                          FontFeature.enable(
+                                                              'subs'),
+                                                        ],
+                                                      )),
+                                                )
+                                              ]),
                                         ),
                                       )
                                     : Container(
@@ -154,135 +173,209 @@ class _ChatDetailState extends State<ChatDetail> {
                                             borderRadius:
                                                 BorderRadius.circular(5),
                                           ),
-                                          child: Text(
-                                            snapshot.data!.docs[index]
-                                                ['message'],
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
+                                          child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Text(
+                                                  snapshot.data!.docs[index]
+                                                      ['message'],
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Text(
+                                                    '${DateFormat.jm().format(snapshot.data!.docs[index]['createdAt'].toDate())}',
+                                                    textScaleFactor: 0.7,
+                                                    style: TextStyle(
+                                                      color: Colors.grey[600],
+                                                      fontFeatures: [
+                                                        FontFeature.enable(
+                                                            'subs'),
+                                                      ],
+                                                    ))
+                                              ]),
                                         ),
                                       )
                                 :
                                 //if message type is request show this
-                                IgnorePointer(
-                                    ignoring: snapshot.data!.docs[index]
-                                                ['status'] ==
-                                            'R'
-                                        ? true
-                                        : false,
-                                    child: Opacity(
-                                      opacity: snapshot.data!.docs[index]
-                                                  ['status'] ==
-                                              'R'
-                                          ? 0.5
-                                          : 1,
-                                      child: Container(
-                                        margin: EdgeInsets.only(bottom: 5),
-                                        height: mediaHeight * 0.2,
-                                        //color: Colors.red,
-                                        alignment: Alignment.center,
-                                        child: Container(
-                                          padding:
-                                              EdgeInsets.only(top: 5, left: 5),
-                                          width: mediaWidth * 0.6,
-                                          color: Colors.grey[400],
-                                          child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  'Rent Request',
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Text(
-                                                  'Start Date : ${DateFormat('d MMM yyyy').format(DateTime.parse(snapshot.data!.docs[index]['startDate']))}',
-                                                  style: TextStyle(),
-                                                ),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Text(
-                                                    'End Date   : ${DateFormat('d MMM yyyy').format(DateTime.parse(snapshot.data!.docs[index]['startDate']))}'),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                Text(
-                                                    'Amount     : ${snapshot.data!.docs[index]['amount']}'),
-                                                SizedBox(
-                                                  height: 5,
-                                                ),
-                                                chatController.userId ==
-                                                        snapshot.data!
-                                                            .docs[index]['from']
-                                                    ? Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceAround,
-                                                        children: [
-                                                          ElevatedButton(
-                                                              style: ElevatedButton
-                                                                  .styleFrom(
-                                                                      primary:
-                                                                          Colors
+                                snapshot.data!.docs[index]['status'] == 'R'
+                                    ? IgnorePointer(
+                                        ignoring: snapshot.data!.docs[index]
+                                                    ['status'] ==
+                                                'R'
+                                            ? true
+                                            : false,
+                                        child: Opacity(
+                                          opacity: snapshot.data!.docs[index]
+                                                      ['status'] ==
+                                                  'R'
+                                              ? 0.5
+                                              : 1,
+                                          child: Container(
+                                            margin: EdgeInsets.only(bottom: 5),
+                                            height: mediaHeight * 0.2,
+                                            //color: Colors.red,
+                                            alignment: Alignment.center,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  color: Colors.grey[300],
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10)),
+                                              padding: EdgeInsets.only(
+                                                  top: 5, left: 10),
+                                              width: mediaWidth * 0.6,
+                                              child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Rent Request',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Text(
+                                                      'Start Date : ${DateFormat('d MMM yyyy').format(DateTime.parse(snapshot.data!.docs[index]['startDate']))}',
+                                                      style: TextStyle(),
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Text(
+                                                        'End Date   : ${DateFormat('d MMM yyyy').format(DateTime.parse(snapshot.data!.docs[index]['startDate']))}'),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Text(
+                                                        'Amount     : ${snapshot.data!.docs[index]['amount']}'),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    chatController.userId !=
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                ['from']
+                                                        ? Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceAround,
+                                                            children: [
+                                                              ElevatedButton(
+                                                                  style: ElevatedButton
+                                                                      .styleFrom(
+                                                                          primary: Colors
                                                                               .green),
-                                                              onPressed: () {},
-                                                              child: Text(
-                                                                  'Accept')),
-                                                          ElevatedButton(
-                                                              style: ElevatedButton
-                                                                  .styleFrom(
+                                                                  onPressed:
+                                                                      () {},
+                                                                  child: Text(
+                                                                      'Accept')),
+                                                              ElevatedButton(
+                                                                  style: ElevatedButton.styleFrom(
                                                                       primary: Colors
                                                                               .red[
                                                                           400]),
-                                                              onPressed: () {
-                                                                snapshot
-                                                                    .data!
-                                                                    .docs[index]
-                                                                    .id;
-                                                                chatController.rejected(
-                                                                    widget.toId,
+                                                                  onPressed:
+                                                                      () {
                                                                     snapshot
                                                                         .data!
                                                                         .docs[
                                                                             index]
-                                                                        .id);
-                                                              },
-                                                              child: Text(
-                                                                  'Reject')),
-                                                        ],
-                                                      )
-                                                    : SizedBox(),
-                                                //withdraw request
-                                                chatController.userId !=
-                                                        snapshot.data!
-                                                            .docs[index]['from']
-                                                    ? Row(
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .spaceAround,
-                                                        children: [
-                                                          ElevatedButton(
-                                                              style: ElevatedButton
-                                                                  .styleFrom(
-                                                                      primary:
-                                                                          Colors
+                                                                        .id;
+                                                                    chatController
+                                                                        .rejected(
+                                                                      snapshot
+                                                                          .data!
+                                                                          .docs[index]['from'],
+                                                                      snapshot
+                                                                          .data!
+                                                                          .docs[index]['fromMessageId'],
+                                                                      snapshot
+                                                                          .data!
+                                                                          .docs[index]['to'],
+                                                                      snapshot
+                                                                          .data!
+                                                                          .docs[index]['toMessageId'],
+                                                                    );
+                                                                  },
+                                                                  child: Text(
+                                                                      'Reject')),
+                                                            ],
+                                                          )
+                                                        : SizedBox(),
+                                                    //withdraw request
+                                                    chatController.userId ==
+                                                            snapshot.data!
+                                                                    .docs[index]
+                                                                ['from']
+                                                        ? Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceAround,
+                                                            children: [
+                                                              ElevatedButton(
+                                                                  style: ElevatedButton
+                                                                      .styleFrom(
+                                                                          primary: Colors
                                                                               .green),
-                                                              onPressed: () {},
-                                                              child: Text(
-                                                                  'Withdraw Request')),
-                                                        ],
-                                                      )
-                                                    : SizedBox()
-                                              ]),
+                                                                  onPressed:
+                                                                      () {
+                                                                    chatController
+                                                                        .withDrawRequest(
+                                                                      snapshot
+                                                                          .data!
+                                                                          .docs[index]['from'],
+                                                                      snapshot
+                                                                          .data!
+                                                                          .docs[index]['fromMessageId'],
+                                                                      snapshot
+                                                                          .data!
+                                                                          .docs[index]['to'],
+                                                                      snapshot
+                                                                          .data!
+                                                                          .docs[index]['toMessageId'],
+                                                                    );
+                                                                  },
+                                                                  child: Text(
+                                                                      'Withdraw Request')),
+                                                            ],
+                                                          )
+                                                        : SizedBox()
+                                                  ]),
+                                            ),
+                                          ),
                                         ),
-                                      ),
-                                    ),
-                                  );
+                                      )
+                                    :
+                                    //if it is withdrawn
+                                    Container(
+                                        margin: EdgeInsets.only(bottom: 10),
+                                        //color: Colors.red,
+                                        width: 50,
+                                        child: Center(
+                                          child: Container(
+                                              height: 50,
+                                              width: 200,
+                                              decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(30),
+                                                  color: Colors.grey[300]),
+                                              child: Center(
+                                                child: Text(
+                                                  'Request Withdrawn',
+                                                  style: GoogleFonts.ubuntu(
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: Colors.grey),
+                                                ),
+                                              )),
+                                        ),
+                                      );
                           }),
                     );
                   } else {

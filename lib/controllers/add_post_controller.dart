@@ -22,6 +22,7 @@ class AddPostController extends GetxController {
   double? lat = 0.0;
   double? lng = 0.0;
   String userId = '';
+  var loading = false.obs;
 
   late GooglePlace googlePlace;
 
@@ -72,6 +73,7 @@ class AddPostController extends GetxController {
   }
 
   void addPost() async {
+    loading.value = true;
     DateTime createdAt = DateTime.now();
     userId = _firebaseAuth.currentUser!.uid;
     List<String> urlList = [];
@@ -86,7 +88,8 @@ class AddPostController extends GetxController {
         'address': address.value,
         'lat': lat,
         'lng': lng,
-        'userId': userId
+        'userId': userId,
+        'favorites': []
       });
       try {
         await _firestore
@@ -126,6 +129,15 @@ class AddPostController extends GetxController {
     } catch (err) {
       print('add post error $err');
     }
+    await Future.delayed(Duration(seconds: 3));
+    Get.showSnackbar(GetSnackBar(
+      title: 'Success',
+      message: 'Add uploaded successfully',
+      backgroundColor: Colors.green[400] as Color,
+      duration: Duration(seconds: 2),
+    ));
+
+    loading.value = false;
   }
 
   bool checkEmptyField() {

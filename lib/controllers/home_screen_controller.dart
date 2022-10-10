@@ -45,6 +45,7 @@ class HomeScreenController extends GetxController {
     try {
       var posts = await _firebaseFirestore.collection('Posts').get();
       print('posts is $posts');
+      print('posts ${posts.docs[0]['category']}');
       for (int i = 0; i < posts.docs.length; i++) {
         if (posts.docs[i]['userId'] != userId) {
           PostsModel temp = PostsModel.empty();
@@ -72,7 +73,7 @@ class HomeScreenController extends GetxController {
       }
       loading.value = false;
     } catch (err) {
-      print('getPost error $err');
+      print('getPost error ${err}');
     }
   }
 

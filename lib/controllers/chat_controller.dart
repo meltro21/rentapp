@@ -48,7 +48,18 @@ class ChatController extends GetxController {
     FocusManager.instance.primaryFocus?.unfocus();
 
     try {
-      await _firebaseFirestore.collection('Chats/$fromId/$toId').add({
+      var message1 =
+          await _firebaseFirestore.collection('Chats/$fromId/$toId').add({
+        'type': 'M',
+        'to': toId,
+        'from': fromId,
+        'createdAt': DateTime.now(),
+        'message': messageController.text
+      });
+      print("message 1 id is ${message1.id}");
+
+      var message2 =
+          await _firebaseFirestore.collection('Chats/$toId/$fromId').add({
         'type': 'M',
         'to': toId,
         'from': fromId,
@@ -56,12 +67,33 @@ class ChatController extends GetxController {
         'message': messageController.text
       });
 
-      await _firebaseFirestore.collection('Chats/$toId/$fromId').add({
+      print("message 2 id is ${message2.id}");
+
+      await _firebaseFirestore
+          .collection('Chats/$fromId/$toId')
+          .doc(message1.id)
+          .update({
         'type': 'M',
         'to': toId,
         'from': fromId,
         'createdAt': DateTime.now(),
-        'message': messageController.text
+        'message': messageController.text,
+        'toMessageId': message1.id,
+        'fromMessageId': message2.id
+      });
+
+      await _firebaseFirestore
+          .collection('Chats/$toId/$fromId')
+          .doc(message2.id)
+          .update({
+        'type': 'M',
+        'to': toId,
+        'from': fromId,
+        'createdAt': DateTime.now(),
+        'message': messageController.text,
+        'id': message2.id,
+        'toMessageId': message1.id,
+        'fromMessageId': message2.id
       });
 
       var a = await _firebaseFirestore
@@ -137,7 +169,8 @@ class ChatController extends GetxController {
   Future<void> submitRequest(String toId) async {
     print('submit');
     try {
-      await _firebaseFirestore.collection('Chats/$userId/$toId').add({
+      var fromMessageId =
+          await _firebaseFirestore.collection('Chats/$userId/$toId').add({
         'type': 'R',
         'to': toId,
         'from': userId,
@@ -146,16 +179,13 @@ class ChatController extends GetxController {
         'startDate': startDate.toString(),
         'endDate': endDate.toString(),
         'amount': amountController.text,
-        'status': 'pending'
+        'status': 'R'
       });
-    } catch (err) {
-      print('submit request error is $err');
-    }
 
-    try {
-      await _firebaseFirestore.collection('Chats/$toId/$userId').add({
+      var toMessageId =
+          await _firebaseFirestore.collection('Chats/$toId/$userId').add({
         'type': 'R',
-        'status': 'pending',
+        'status': 'R',
         'to': toId,
         'from': userId,
         'createdAt': DateTime.now(),
@@ -164,16 +194,59 @@ class ChatController extends GetxController {
         'endDate': endDate.toString(),
         'amount': amountController.text
       });
-    } catch (err) {
-      print('submit request error is $err');
-    }
-  }
 
-  Future<void> rejected(String toId, String docId) async {
-    try {
       await _firebaseFirestore
           .collection('Chats/$userId/$toId')
-          .doc(docId)
+          .doc(fromMessageId.id)
+          .update({
+        'type': 'R',
+        'to': toId,
+        'from': userId,
+        'createdAt': DateTime.now(),
+        'message': '1',
+        'startDate': startDate.toString(),
+        'endDate': endDate.toString(),
+        'amount': amountController.text,
+        'status': 'R',
+        'fromMessageId': fromMessageId.id,
+        'toMessageId': toMessageId.id
+      });
+
+      await _firebaseFirestore
+          .collection('Chats/$toId/$userId')
+          .doc(toMessageId.id)
+          .update({
+        'type': 'R',
+        'status': 'R',
+        'to': toId,
+        'from': userId,
+        'createdAt': DateTime.now(),
+        'message': '1',
+        'startDate': startDate.toString(),
+        'endDate': endDate.toString(),
+        'amount': amountController.text,
+        'fromMessageId': fromMessageId.id,
+        'toMessageId': toMessageId.id
+      });
+      Get.back();
+    } catch (err) {}
+  }
+
+  Future<void> rejected(
+    String fromId,
+    String fromMessageId,
+    String toId,
+    String toMessageId,
+  ) async {
+    print('');
+    try {
+      print('form $fromId');
+      print('formMessageId $fromMessageId');
+      print('toMessageId $toId');
+      print('toMessageId $toMessageId');
+      await _firebaseFirestore
+          .collection('Chats/$fromId/$toId')
+          .doc(fromMessageId)
           .update({
         'type': 'R',
         'to': toId,
@@ -186,13 +259,13 @@ class ChatController extends GetxController {
         'status': 'R'
       });
     } catch (err) {
-      print('submit request error is $err');
+      print('reject request error is $err');
     }
 
     try {
       await _firebaseFirestore
-          .collection('Chats/$toId/$userId')
-          .doc(docId)
+          .collection('Chats/$toId/$fromId')
+          .doc(toMessageId)
           .update({
         'type': 'R',
         'to': toId,
@@ -203,6 +276,55 @@ class ChatController extends GetxController {
         'endDate': endDate.toString(),
         'amount': amountController.text,
         'status': 'R'
+      });
+    } catch (err) {
+      print('reject request error is $err');
+    }
+  }
+
+  Future<void> withDrawRequest(
+    String fromId,
+    String fromMessageId,
+    String toId,
+    String toMessageId,
+  ) async {
+    print('form $fromId');
+    print('formMessageId $fromMessageId');
+    print('toMessageId $toId');
+    print('toMessageId $toMessageId');
+    try {
+      await _firebaseFirestore
+          .collection('Chats/$fromId/$toId')
+          .doc(fromMessageId)
+          .update({
+        'type': 'R',
+        'to': toId,
+        'from': userId,
+        'createdAt': DateTime.now(),
+        'message': '1',
+        'startDate': startDate.toString(),
+        'endDate': endDate.toString(),
+        'amount': amountController.text,
+        'status': 'W'
+      });
+    } catch (err) {
+      print('submit request error is $err');
+    }
+
+    try {
+      await _firebaseFirestore
+          .collection('Chats/$toId/$fromId')
+          .doc(toMessageId)
+          .update({
+        'type': 'R',
+        'to': toId,
+        'from': userId,
+        'createdAt': DateTime.now(),
+        'message': '1',
+        'startDate': startDate.toString(),
+        'endDate': endDate.toString(),
+        'amount': amountController.text,
+        'status': 'W'
       });
     } catch (err) {
       print('submit request error is $err');

@@ -37,6 +37,6 @@ class UserInfoController extends GetxController {
     } catch (err) {
       print('get user data $err');
     }
-    postUserInfo.name = a.docs[0]['name'];
+    //postUserInfo.name = a.docs[0]['name'];
   }
 }
