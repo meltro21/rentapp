@@ -16,12 +16,16 @@ class SearchPostController extends GetxController {
   TextEditingController fromController = TextEditingController();
   TextEditingController toController = TextEditingController();
   Rx<bool> searchFilterEnabled = false.obs;
+  Rx<bool> loading = false.obs;
 
   Rx<SearchMode> searchMode = SearchMode.beforeSearch.obs;
   String searchItem = '';
 
   getPosts(String query) async {
+    loading.value = true;
     postsList.clear();
+    query = query.toLowerCase();
+    print(query.toLowerCase());
     var posts;
     try {
       if (fromController.text != '0' || toController.text != '10000') {
@@ -63,6 +67,7 @@ class SearchPostController extends GetxController {
     } catch (err) {
       print('getPost error $err');
     }
+    loading.value = false;
   }
 
   setPriceInitialValue() {

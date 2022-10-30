@@ -16,6 +16,9 @@ class MyAddsController extends GetxController {
   FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   RxList<PostsModel> postsList = <PostsModel>[].obs;
   String userId = '';
+  RxList<bool> favorites = <bool>[].obs;
+  Rx<bool> loading = false.obs;
+
   changeSelection(int choice) {
     selectAdsOrFavourites.value = choice;
   }
@@ -44,6 +47,7 @@ class MyAddsController extends GetxController {
   }
 
   getPosts() async {
+    postsList.clear();
     user = _firebaseAuth.currentUser!;
     userId = user.uid;
     try {
@@ -71,5 +75,44 @@ class MyAddsController extends GetxController {
     } catch (err) {
       print('getPost error $err');
     }
+  }
+
+  getFavouritedPosts() async {
+    postsList.clear();
+    favorites.clear();
+    user = _firebaseAuth.currentUser!;
+    userId = user.uid;
+    loading.value = true;
+    print('user id is $userId');
+    var posts = await _firebaseFirestore.collection('Posts').get();
+    print('posts is $posts');
+    print('posts ${posts.docs[0]['category']}');
+    for (int i = 0; i < posts.docs.length; i++) {
+      PostsModel temp = PostsModel.empty();
+      temp.id = posts.docs[i]['id'];
+      temp.category = posts.docs[i]['category'];
+      temp.subCategory = posts.docs[i]['subCategory'];
+      temp.price = posts.docs[i]['price'];
+      temp.model = posts.docs[i]['model'];
+      temp.description = posts.docs[i]['description'];
+      temp.imagesUrl = posts.docs[i]['imagesUrl'];
+      temp.address = posts.docs[i]['address'];
+      temp.lat = posts.docs[i]['lat'];
+      temp.lng = posts.docs[i]['lng'];
+      temp.userId = posts.docs[i]['userId'];
+      //temp.createdAt = posts.docs[i]['createdAt'];
+      temp.favorites = posts.docs[i]['favorites'];
+      print(temp.favorites);
+      if (temp.favorites.contains(userId)) {
+        //favorites.add(true);
+        postsList.add(temp);
+      } else {
+        //favorites.add(false);
+        print('false');
+      }
+    }
+    //print('posts favourited length ${postsList.length}');
+    //print('value is ${postsList[0].address}');
+    loading.value = false;
   }
 }

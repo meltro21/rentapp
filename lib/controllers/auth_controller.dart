@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:rentapp/models/user_model.dart';
@@ -101,6 +102,7 @@ class AuthController extends GetxController {
           email: email, password: password);
     } catch (err) {
       loading.value = false;
+      Get.defaultDialog(title: 'Signin Error', content: Text('$err'));
       print('signIN error is $err');
     }
     loading.value = false;

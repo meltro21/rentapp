@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:rentapp/models/user_model.dart';
 
@@ -9,8 +11,17 @@ class UserInfoController extends GetxController {
   FirebaseAuth _auth = FirebaseAuth.instance;
   UserModel currentUserInfo = UserModel('', '', '', '', '');
   UserModel postUserInfo = UserModel('', '', '', '', '');
+  TextEditingController nameController = TextEditingController();
+  TextEditingController somethingController = TextEditingController();
+  TextEditingController dateController = TextEditingController();
 
-  Future<void> getUserInof() async {
+  var startDate = DateTime.now().obs;
+
+  changeStartDate(DateTime date) {
+    startDate.value = date;
+  }
+
+  Future<void> getUserInfo() async {
     String currentUserId = _auth.currentUser!.uid;
     print('currentUser id is $currentUserId');
     var a;
@@ -34,9 +45,16 @@ class UserInfoController extends GetxController {
           .collection('Users')
           .where('userId', isEqualTo: toUserId)
           .get();
+      postUserInfo.eamil = a.docs[0]['email'];
+      postUserInfo.name = a.docs[0]['name'];
+      print('name is ${postUserInfo.name}');
     } catch (err) {
       print('get user data $err');
     }
     //postUserInfo.name = a.docs[0]['name'];
+  }
+
+  Future<void> updateUserData() async {
+    String currentUserId = _auth.currentUser!.uid;
   }
 }

@@ -4,7 +4,9 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:rentapp/controllers/auth_controller.dart';
+import 'package:rentapp/controllers/user_info_controller.dart';
 import 'package:rentapp/views/authentication/login.dart';
+import 'package:rentapp/views/profile/edit_profile.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -14,7 +16,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
-  //AuthController authController = Get.find();
+  UserInfoController _userInfoController = Get.find();
   @override
   Widget build(BuildContext context) {
     var mediaHeight = MediaQuery.of(context).size.height;
@@ -23,13 +25,6 @@ class _ProfileState extends State<Profile> {
       body: SafeArea(
         child: Container(
           margin: EdgeInsets.only(left: 10, right: 10),
-          //child: RaisedButton(
-          //   onPressed: (() async {
-          //     // var logOut = await authController.logout();
-          //     // if (logOut == true) {
-          //     //   Get.off(LoginScreen());
-          //     // }
-          //   }),
           child: Column(children: [
             //profile seciton
             Container(
@@ -40,6 +35,28 @@ class _ProfileState extends State<Profile> {
                   backgroundImage: AssetImage("assets/images/person1.jpeg"),
                   maxRadius: 30,
                 ),
+                SizedBox(
+                  width: 20,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(_userInfoController.currentUserInfo.name),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Get.to(EditProfile());
+                      },
+                      child: Text(
+                        'View and edit profile',
+                        style: TextStyle(decoration: TextDecoration.underline),
+                      ),
+                    )
+                  ],
+                )
               ]),
             ),
           ]),

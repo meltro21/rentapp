@@ -46,6 +46,8 @@ class ChatController extends GetxController {
     //print('post id is ${postDetails.id}');
     // print('final is ${path}');
     FocusManager.instance.primaryFocus?.unfocus();
+    var message = messageController.text;
+    messageController.clear();
 
     try {
       var message1 =
@@ -54,7 +56,7 @@ class ChatController extends GetxController {
         'to': toId,
         'from': fromId,
         'createdAt': DateTime.now(),
-        'message': messageController.text
+        'message': message
       });
       print("message 1 id is ${message1.id}");
 
@@ -64,7 +66,7 @@ class ChatController extends GetxController {
         'to': toId,
         'from': fromId,
         'createdAt': DateTime.now(),
-        'message': messageController.text
+        'message': message
       });
 
       print("message 2 id is ${message2.id}");
@@ -77,7 +79,7 @@ class ChatController extends GetxController {
         'to': toId,
         'from': fromId,
         'createdAt': DateTime.now(),
-        'message': messageController.text,
+        'message': message,
         'toMessageId': message1.id,
         'fromMessageId': message2.id
       });
@@ -90,7 +92,7 @@ class ChatController extends GetxController {
         'to': toId,
         'from': fromId,
         'createdAt': DateTime.now(),
-        'message': messageController.text,
+        'message': message,
         'id': message2.id,
         'toMessageId': message1.id,
         'fromMessageId': message2.id
@@ -107,7 +109,7 @@ class ChatController extends GetxController {
           'to': toId,
           'from': userId,
           'createdAt': DateTime.now(),
-          'message': messageController.text,
+          'message': message,
           'toUserName': userInfoController.postUserInfo.name,
         });
       } else {
@@ -119,7 +121,7 @@ class ChatController extends GetxController {
           'to': toId,
           'from': userId,
           'createdAt': DateTime.now(),
-          'message': messageController.text,
+          'message': message,
           'toUserName': userInfoController.postUserInfo.name,
         });
       }
@@ -134,7 +136,7 @@ class ChatController extends GetxController {
           'to': fromId,
           'from': toId,
           'createdAt': DateTime.now(),
-          'message': messageController.text,
+          'message': message,
           'toUserName': userInfoController.currentUserInfo.name,
         });
       } else {
@@ -146,12 +148,12 @@ class ChatController extends GetxController {
           'to': fromId,
           'from': toId,
           'createdAt': DateTime.now(),
-          'message': messageController.text,
+          'message': message,
           'toUserName': userInfoController.currentUserInfo.name,
         });
       }
 
-      messageController.clear();
+      //messageController.clear();
     } catch (err) {
       print('Send Message error is $err');
     }
@@ -167,6 +169,7 @@ class ChatController extends GetxController {
   }
 
   Future<void> submitRequest(String toId) async {
+    Get.back();
     print('submit');
     try {
       var fromMessageId =
@@ -179,13 +182,13 @@ class ChatController extends GetxController {
         'startDate': startDate.toString(),
         'endDate': endDate.toString(),
         'amount': amountController.text,
-        'status': 'R'
+        'status': 'P'
       });
 
       var toMessageId =
           await _firebaseFirestore.collection('Chats/$toId/$userId').add({
         'type': 'R',
-        'status': 'R',
+        'status': 'P',
         'to': toId,
         'from': userId,
         'createdAt': DateTime.now(),
@@ -207,7 +210,7 @@ class ChatController extends GetxController {
         'startDate': startDate.toString(),
         'endDate': endDate.toString(),
         'amount': amountController.text,
-        'status': 'R',
+        'status': 'P',
         'fromMessageId': fromMessageId.id,
         'toMessageId': toMessageId.id
       });
@@ -217,7 +220,7 @@ class ChatController extends GetxController {
           .doc(toMessageId.id)
           .update({
         'type': 'R',
-        'status': 'R',
+        'status': 'P',
         'to': toId,
         'from': userId,
         'createdAt': DateTime.now(),
@@ -228,7 +231,7 @@ class ChatController extends GetxController {
         'fromMessageId': fromMessageId.id,
         'toMessageId': toMessageId.id
       });
-      Get.back();
+      //Get.back();
     } catch (err) {}
   }
 

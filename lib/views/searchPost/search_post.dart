@@ -237,106 +237,125 @@ class _SearchPostState extends State<SearchPost> {
           Obx(() => searchPostController.searchMode.value ==
                   SearchMode.afterSearch
               ? Expanded(
-                  child: ListView.builder(
-                    itemCount: searchPostController.postsList.length,
-                    itemBuilder: ((context, index) {
-                      return GestureDetector(
-                        onTap: (() {
-                          Get.to(AddDetailHome(
-                              postDetails:
-                                  searchPostController.postsList[index]));
-                        }),
-                        child: Container(
-                          margin: EdgeInsets.only(left: 10, right: 10, top: 10),
-                          height: mediaHeight * 0.14,
-                          width: mediaWidth,
-                          child: Row(
-                            children: [
-                              Stack(children: [
-                                Container(
-                                  height: mediaHeight * 0.14,
-                                  width: mediaWidth * 0.35,
-                                  decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: NetworkImage(
-                                        searchPostController
-                                            .postsList[index].imagesUrl[0],
-                                      ),
-                                    ),
-                                  ),
-                                  // child: Image(
-                                  //   image: AssetImage(
-                                  //     'assets/images/image1.jpeg',
-                                  //   ),
-                                  //   fit: BoxFit.fill,
-                                  //   height: mediaHeight,
-                                  //   width: mediaWidth * 0.3,
-                                  // ),
-                                ),
-                                Positioned(
+                  child: searchPostController.loading.value == true
+                      ? Center(
+                          child: SizedBox(
+                              height: 50,
+                              width: 50,
+                              child: CircularProgressIndicator()),
+                        )
+                      : searchPostController.postsList.length > 0
+                          ? ListView.builder(
+                              itemCount: searchPostController.postsList.length,
+                              itemBuilder: ((context, index) {
+                                return GestureDetector(
+                                  onTap: (() {
+                                    Get.to(AddDetailHome(
+                                        postDetails: searchPostController
+                                            .postsList[index]));
+                                  }),
                                   child: Container(
-                                    color: Colors.yellow,
-                                    child: Text('Pending'),
-                                  ),
-                                ),
-                              ]),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(''),
-                                    Row(children: [
-                                      Text(searchPostController
-                                          .postsList[index].model),
-                                      // Expanded(child: SizedBox()),
-                                      // Icon(
-                                      //   Icons.favorite,
-                                      //   color: Colors.red,
-                                      // ),
-                                    ]),
-                                    SizedBox(
-                                      height: mediaHeight * 0.3 * 0.02,
-                                    ),
-                                    Text(
-                                      'Rs ${searchPostController.postsList[index].price}',
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(
-                                      height: mediaHeight * 0.3 * 0.01,
-                                    ),
-                                    Row(children: [
-                                      Expanded(
-                                        child: Container(
-                                          // width: mediaWidth / 2,
-                                          child: Text(
-                                            '${searchPostController.postsList[index].address}',
-                                            style: TextStyle(fontSize: 12),
-                                            overflow: TextOverflow.ellipsis,
+                                    margin: EdgeInsets.only(
+                                        left: 10, right: 10, top: 10),
+                                    height: mediaHeight * 0.14,
+                                    width: mediaWidth,
+                                    child: Row(
+                                      children: [
+                                        Stack(children: [
+                                          Container(
+                                            height: mediaHeight * 0.14,
+                                            width: mediaWidth * 0.35,
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image: NetworkImage(
+                                                  searchPostController
+                                                      .postsList[index]
+                                                      .imagesUrl[0],
+                                                ),
+                                              ),
+                                            ),
+                                            // child: Image(
+                                            //   image: AssetImage(
+                                            //     'assets/images/image1.jpeg',
+                                            //   ),
+                                            //   fit: BoxFit.fill,
+                                            //   height: mediaHeight,
+                                            //   width: mediaWidth * 0.3,
+                                            // ),
                                           ),
+                                          Positioned(
+                                            child: Container(
+                                              color: Colors.yellow,
+                                              child: Text('Pending'),
+                                            ),
+                                          ),
+                                        ]),
+                                        SizedBox(
+                                          width: 10,
                                         ),
-                                      ),
-                                      Expanded(child: SizedBox()),
-                                      Text(
-                                        DateFormat('d MMM yyyy').format(
-                                            searchPostController
-                                                .postsList[index].createdAt),
-                                        style: TextStyle(fontSize: 12),
-                                      )
-                                    ]),
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                      );
-                    }),
-                  ),
-                )
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(''),
+                                              Row(children: [
+                                                Text(searchPostController
+                                                    .postsList[index].model),
+                                                // Expanded(child: SizedBox()),
+                                                // Icon(
+                                                //   Icons.favorite,
+                                                //   color: Colors.red,
+                                                // ),
+                                              ]),
+                                              SizedBox(
+                                                height:
+                                                    mediaHeight * 0.3 * 0.02,
+                                              ),
+                                              Text(
+                                                'Rs ${searchPostController.postsList[index].price}',
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                              SizedBox(
+                                                height:
+                                                    mediaHeight * 0.3 * 0.01,
+                                              ),
+                                              Row(children: [
+                                                Expanded(
+                                                  child: Container(
+                                                    // width: mediaWidth / 2,
+                                                    child: Text(
+                                                      '${searchPostController.postsList[index].address}',
+                                                      style: TextStyle(
+                                                          fontSize: 12),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Expanded(child: SizedBox()),
+                                                Text(
+                                                  DateFormat('d MMM yyyy')
+                                                      .format(
+                                                          searchPostController
+                                                              .postsList[index]
+                                                              .createdAt),
+                                                  style:
+                                                      TextStyle(fontSize: 12),
+                                                )
+                                              ]),
+                                            ],
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }),
+                            )
+                          : Center(child: Text('No Ads Available!')))
               : SizedBox())
         ],
       )),

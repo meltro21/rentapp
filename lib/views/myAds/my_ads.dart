@@ -76,6 +76,7 @@ class _MyAdsState extends State<MyAds> {
                       myAddsController.changeSelection(1);
                       changeLength1(mediaWidth);
                       index++;
+                      myAddsController.getPosts();
                       print('index is $index');
                     },
                     child: Column(
@@ -103,6 +104,7 @@ class _MyAdsState extends State<MyAds> {
                     onTap: () {
                       myAddsController.changeSelection(2);
                       changeLength2(mediaWidth);
+                      myAddsController.getFavouritedPosts();
                     },
                     child: Column(
                       children: [
@@ -236,7 +238,7 @@ class _MyAdsState extends State<MyAds> {
                 )
               : Expanded(
                   child: ListView.builder(
-                      itemCount: myAddsController.favouriteAdds.length,
+                      itemCount: myAddsController.postsList.length,
                       itemBuilder: ((context, index) {
                         return Container(
                           margin: EdgeInsets.only(left: 10, right: 10, top: 10),
@@ -248,13 +250,13 @@ class _MyAdsState extends State<MyAds> {
                                 height: mediaHeight * 0.14,
                                 width: mediaWidth * 0.35,
                                 decoration: BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                        myAddsController
-                                            .favouriteAdds[index].path,
-                                      ),
+                                  image: DecorationImage(
+                                    image: NetworkImage(
+                                      myAddsController
+                                          .postsList[index].imagesUrl[0],
                                     ),
-                                    borderRadius: BorderRadius.circular(30)),
+                                  ),
+                                ),
                                 // child: Image(
                                 //   image: AssetImage(
                                 //     'assets/images/image1.jpeg',
@@ -274,7 +276,8 @@ class _MyAdsState extends State<MyAds> {
                                     Text(''),
                                     Row(children: [
                                       Text(myAddsController
-                                          .favouriteAdds[index].name),
+                                          .postsList[index].subCategory
+                                          .toUpperCase()),
                                       Expanded(child: SizedBox()),
                                       InkWell(
                                         onTap: () {
@@ -291,8 +294,7 @@ class _MyAdsState extends State<MyAds> {
                                       height: mediaHeight * 0.3 * 0.02,
                                     ),
                                     Text(
-                                      myAddsController
-                                          .favouriteAdds[index].price
+                                      myAddsController.postsList[index].price
                                           .toString(),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold),
@@ -300,17 +302,36 @@ class _MyAdsState extends State<MyAds> {
                                     SizedBox(
                                       height: mediaHeight * 0.3 * 0.01,
                                     ),
-                                    Row(children: [
-                                      Text(
-                                        'Faisal Town, Lahore',
-                                        style: TextStyle(fontSize: 12),
+                                    Expanded(
+                                      child: Container(
+                                        width: mediaWidth / 2,
+                                        child: Text(
+                                          '${myAddsController.postsList[index].address}',
+                                          style: TextStyle(fontSize: 12),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
+                                    ),
+                                    Row(children: [
                                       Expanded(child: SizedBox()),
                                       Text(
-                                        '18 May',
+                                        DateFormat('d MMM yyyy').format(
+                                            myAddsController
+                                                .postsList[index].createdAt),
                                         style: TextStyle(fontSize: 12),
                                       )
                                     ]),
+                                    // Row(children: [
+                                    //   Text(
+                                    //     '${myAddsController.postsList[index].address}',
+                                    //     style: TextStyle(fontSize: 12),
+                                    //   ),
+                                    //   Expanded(child: SizedBox()),
+                                    //   // Text(
+                                    //   //   '18 May',
+                                    //   //   style: TextStyle(fontSize: 12),
+                                    //   // )
+                                    // ]),
                                   ],
                                 ),
                               )

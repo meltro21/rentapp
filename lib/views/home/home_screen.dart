@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:rentapp/controllers/home_screen_controller.dart';
 import 'package:rentapp/controllers/my_adds_controller.dart';
 import 'package:rentapp/controllers/search_post_controller.dart';
+import 'package:rentapp/controllers/user_info_controller.dart';
 import 'package:rentapp/models/posts_model.dart';
 import 'dart:math' as math;
 
@@ -21,6 +22,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   HomeScreenController homeScreenController = Get.put(HomeScreenController());
   MyAddsController myAddsController = Get.put(MyAddsController());
+  UserInfoController userInfoController = Get.find();
 
   @override
   void initState() {
@@ -274,6 +276,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       // for (int j = 0; j < 2; j++)
                                       InkWell(
                                         onTap: () {
+                                          userInfoController.getPostUserAllData(
+                                              homeScreenController
+                                                  .postsList[index].userId);
                                           Get.to(AddDetailHome(
                                             postDetails: homeScreenController
                                                 .postsList[(index)],

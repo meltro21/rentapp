@@ -376,205 +376,205 @@ class _AddDetailHomeState extends State<AddDetailHome> {
                       ),
                     ),
                     //book a wheel
-                    GestureDetector(
-                      onTap: () {
-                        Get.bottomSheet(BottomSheet(
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20)),
-                            onClosing: () {},
-                            builder: (context) {
-                              return StatefulBuilder(
-                                builder: ((context, setState) {
-                                  return Container(
-                                    margin: EdgeInsets.only(left: 10),
-                                    child: SingleChildScrollView(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Center(
-                                            child: Container(
-                                              margin: EdgeInsets.only(top: 10),
-                                              child: Text(
-                                                'Enter Details',
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.bold,
-                                                    fontSize: 20),
-                                              ),
-                                            ),
-                                          ),
-                                          //Text('Amount/day'),
-                                          TextField(
-                                            controller: addDetailController
-                                                .amountController,
-                                            decoration: InputDecoration(
-                                              label: Text('Amount/day'),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            'Start Date',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              _selectDate(context, 1);
-                                            },
-                                            child: Container(
-                                              margin: EdgeInsets.only(left: 30),
-                                              padding: EdgeInsets.only(left: 5),
-                                              height: mediaHeight * 0.06,
-                                              width: mediaWidth / 3 + 20,
-                                              decoration: BoxDecoration(
-                                                  border: Border.all(),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              child: Row(children: [
-                                                Obx(
-                                                  () => Text(DateFormat.yMMMd()
-                                                      .format(
-                                                          addDetailController
-                                                              .startDate
-                                                              .value)),
-                                                ),
-                                                Icon(
-                                                  Icons.calendar_month,
-                                                  color: Color(0xffF4B755),
-                                                ),
-                                              ]),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Text(
-                                            'End Date',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold),
-                                          ),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          GestureDetector(
-                                            onTap: () {
-                                              _selectDate(context, 2);
-                                            },
-                                            child: Container(
-                                              margin: EdgeInsets.only(left: 30),
-                                              padding: EdgeInsets.only(left: 5),
-                                              height: mediaHeight * 0.06,
-                                              width: mediaWidth / 3 + 20,
-                                              decoration: BoxDecoration(
-                                                border: Border.all(),
-                                                borderRadius:
-                                                    BorderRadius.circular(10),
-                                              ),
-                                              child: Row(children: [
-                                                Obx(
-                                                  () => Text(DateFormat.yMMMd()
-                                                      .format(
-                                                          addDetailController
-                                                              .endDate.value)),
-                                                ),
-                                                Icon(
-                                                  Icons.calendar_month,
-                                                  color: Color(0xffF4B755),
-                                                ),
-                                              ]),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 20,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              addDetailController.submitRequest(
-                                                  widget.postDetails.userId);
-                                            },
-                                            child: Center(
-                                              child: Container(
-                                                height: mediaHeight * 0.06,
-                                                width: mediaWidth / 2 - 20,
-                                                decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                    color: Color(0xffF4B755)),
-                                                margin: EdgeInsets.only(
-                                                    top: mediaHeight * 0.01,
-                                                    bottom: mediaHeight * 0.01),
-                                                child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Icon(
-                                                        Icons.send,
-                                                        color: Colors.white,
-                                                      ),
-                                                      SizedBox(
-                                                        width:
-                                                            mediaWidth * 0.02,
-                                                      ),
-                                                      Text(
-                                                        'Submit Request',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white),
-                                                      ),
-                                                    ]),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                }),
-                              );
-                            }));
-                        // Get.defaultDialog(
-                        //     title: 'Confirmation',
-                        //     content:
-                        //         Text('Are you sure you want to book the weel?'),
-                        //     onConfirm: () {
-                        //       Get.back();
-                        //     },
-                        //     onCancel: () {});
-                      },
-                      child: Container(
-                        height: mediaHeight * 0.06,
-                        width: mediaWidth / 2 - 20,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10),
-                            color: Color(0xffF4B755)),
-                        margin: EdgeInsets.only(
-                            top: mediaHeight * 0.01,
-                            bottom: mediaHeight * 0.01),
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.car_rental,
-                                color: Colors.white,
-                              ),
-                              SizedBox(
-                                width: mediaWidth * 0.02,
-                              ),
-                              Text(
-                                'Book a Wheel',
-                                style: TextStyle(color: Colors.white),
-                              )
-                            ]),
-                      ),
-                    ),
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Get.bottomSheet(BottomSheet(
+                    //         shape: RoundedRectangleBorder(
+                    //             borderRadius: BorderRadius.circular(20)),
+                    //         onClosing: () {},
+                    //         builder: (context) {
+                    //           return StatefulBuilder(
+                    //             builder: ((context, setState) {
+                    //               return Container(
+                    //                 margin: EdgeInsets.only(left: 10),
+                    //                 child: SingleChildScrollView(
+                    //                   child: Column(
+                    //                     crossAxisAlignment:
+                    //                         CrossAxisAlignment.start,
+                    //                     children: [
+                    //                       Center(
+                    //                         child: Container(
+                    //                           margin: EdgeInsets.only(top: 10),
+                    //                           child: Text(
+                    //                             'Enter Details',
+                    //                             style: TextStyle(
+                    //                                 fontWeight: FontWeight.bold,
+                    //                                 fontSize: 20),
+                    //                           ),
+                    //                         ),
+                    //                       ),
+                    //                       //Text('Amount/day'),
+                    //                       TextField(
+                    //                         controller: addDetailController
+                    //                             .amountController,
+                    //                         decoration: InputDecoration(
+                    //                           label: Text('Amount/day'),
+                    //                         ),
+                    //                       ),
+                    //                       SizedBox(
+                    //                         height: 10,
+                    //                       ),
+                    //                       Text(
+                    //                         'Start Date',
+                    //                         style: TextStyle(
+                    //                             fontWeight: FontWeight.bold),
+                    //                       ),
+                    //                       SizedBox(
+                    //                         height: 5,
+                    //                       ),
+                    //                       GestureDetector(
+                    //                         onTap: () {
+                    //                           _selectDate(context, 1);
+                    //                         },
+                    //                         child: Container(
+                    //                           margin: EdgeInsets.only(left: 30),
+                    //                           padding: EdgeInsets.only(left: 5),
+                    //                           height: mediaHeight * 0.06,
+                    //                           width: mediaWidth / 3 + 20,
+                    //                           decoration: BoxDecoration(
+                    //                               border: Border.all(),
+                    //                               borderRadius:
+                    //                                   BorderRadius.circular(
+                    //                                       10)),
+                    //                           child: Row(children: [
+                    //                             Obx(
+                    //                               () => Text(DateFormat.yMMMd()
+                    //                                   .format(
+                    //                                       addDetailController
+                    //                                           .startDate
+                    //                                           .value)),
+                    //                             ),
+                    //                             Icon(
+                    //                               Icons.calendar_month,
+                    //                               color: Color(0xffF4B755),
+                    //                             ),
+                    //                           ]),
+                    //                         ),
+                    //                       ),
+                    //                       SizedBox(
+                    //                         height: 10,
+                    //                       ),
+                    //                       Text(
+                    //                         'End Date',
+                    //                         style: TextStyle(
+                    //                             fontWeight: FontWeight.bold),
+                    //                       ),
+                    //                       SizedBox(
+                    //                         height: 5,
+                    //                       ),
+                    //                       GestureDetector(
+                    //                         onTap: () {
+                    //                           _selectDate(context, 2);
+                    //                         },
+                    //                         child: Container(
+                    //                           margin: EdgeInsets.only(left: 30),
+                    //                           padding: EdgeInsets.only(left: 5),
+                    //                           height: mediaHeight * 0.06,
+                    //                           width: mediaWidth / 3 + 20,
+                    //                           decoration: BoxDecoration(
+                    //                             border: Border.all(),
+                    //                             borderRadius:
+                    //                                 BorderRadius.circular(10),
+                    //                           ),
+                    //                           child: Row(children: [
+                    //                             Obx(
+                    //                               () => Text(DateFormat.yMMMd()
+                    //                                   .format(
+                    //                                       addDetailController
+                    //                                           .endDate.value)),
+                    //                             ),
+                    //                             Icon(
+                    //                               Icons.calendar_month,
+                    //                               color: Color(0xffF4B755),
+                    //                             ),
+                    //                           ]),
+                    //                         ),
+                    //                       ),
+                    //                       SizedBox(
+                    //                         height: 20,
+                    //                       ),
+                    //                       InkWell(
+                    //                         onTap: () {
+                    //                           addDetailController.submitRequest(
+                    //                               widget.postDetails.userId);
+                    //                         },
+                    //                         child: Center(
+                    //                           child: Container(
+                    //                             height: mediaHeight * 0.06,
+                    //                             width: mediaWidth / 2 - 20,
+                    //                             decoration: BoxDecoration(
+                    //                                 borderRadius:
+                    //                                     BorderRadius.circular(
+                    //                                         10),
+                    //                                 color: Color(0xffF4B755)),
+                    //                             margin: EdgeInsets.only(
+                    //                                 top: mediaHeight * 0.01,
+                    //                                 bottom: mediaHeight * 0.01),
+                    //                             child: Row(
+                    //                                 mainAxisAlignment:
+                    //                                     MainAxisAlignment
+                    //                                         .center,
+                    //                                 children: [
+                    //                                   Icon(
+                    //                                     Icons.send,
+                    //                                     color: Colors.white,
+                    //                                   ),
+                    //                                   SizedBox(
+                    //                                     width:
+                    //                                         mediaWidth * 0.02,
+                    //                                   ),
+                    //                                   Text(
+                    //                                     'Submit Request',
+                    //                                     style: TextStyle(
+                    //                                         color:
+                    //                                             Colors.white),
+                    //                                   ),
+                    //                                 ]),
+                    //                           ),
+                    //                         ),
+                    //                       ),
+                    //                     ],
+                    //                   ),
+                    //                 ),
+                    //               );
+                    //             }),
+                    //           );
+                    //         }));
+                    //     // Get.defaultDialog(
+                    //     //     title: 'Confirmation',
+                    //     //     content:
+                    //     //         Text('Are you sure you want to book the weel?'),
+                    //     //     onConfirm: () {
+                    //     //       Get.back();
+                    //     //     },
+                    //     //     onCancel: () {});
+                    //   },
+                    //   child: Container(
+                    //     height: mediaHeight * 0.06,
+                    //     width: mediaWidth / 2 - 20,
+                    //     decoration: BoxDecoration(
+                    //         borderRadius: BorderRadius.circular(10),
+                    //         color: Color(0xffF4B755)),
+                    //     margin: EdgeInsets.only(
+                    //         top: mediaHeight * 0.01,
+                    //         bottom: mediaHeight * 0.01),
+                    //     child: Row(
+                    //         mainAxisAlignment: MainAxisAlignment.center,
+                    //         children: [
+                    //           Icon(
+                    //             Icons.car_rental,
+                    //             color: Colors.white,
+                    //           ),
+                    //           SizedBox(
+                    //             width: mediaWidth * 0.02,
+                    //           ),
+                    //           Text(
+                    //             'Book a Wheel',
+                    //             style: TextStyle(color: Colors.white),
+                    //           )
+                    //         ]),
+                    //   ),
+                    // ),
                   ]),
             ),
           )
