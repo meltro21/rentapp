@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:rentapp/controllers/user_info_controller.dart';
 import 'package:rentapp/views/addPost/addPost.dart';
+import 'package:rentapp/views/admin/pending_ads.dart';
 import 'package:rentapp/views/authentication/login.dart';
 import 'package:rentapp/views/authentication/register.dart';
 import 'package:rentapp/views/chat/chat_home.dart';
@@ -48,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
     MyAds(),
     AddPost(),
     ChatHome(),
-    Profile()
+    PendingAds()
   ];
 
   @override

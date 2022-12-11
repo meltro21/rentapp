@@ -69,6 +69,7 @@ class MyAddsController extends GetxController {
         temp.lat = posts.docs[i]['lat'];
         temp.lng = posts.docs[i]['lng'];
         temp.userId = posts.docs[i]['userId'];
+        temp.status = posts.docs[i]['status'];
         //temp.createdAt = posts.docs[i]['createdAt'];
         postsList.add(temp);
       }

@@ -28,7 +28,7 @@ class _ReservationState extends State<Reservation> {
     return Scaffold(
       appBar: AppBar(title: Text('Reservation')),
       body: Center(
-          child: FlatButton(
+          child: TextButton(
         onPressed: () {
           _selectDate(context);
         },

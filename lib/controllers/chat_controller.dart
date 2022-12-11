@@ -171,6 +171,11 @@ class ChatController extends GetxController {
   Future<void> submitRequest(String toId) async {
     Get.back();
     print('submit');
+
+    var diff = startDate.value.difference(endDate.value);
+
+    print('diff in hours ${diff.inHours}');
+
     try {
       var fromMessageId =
           await _firebaseFirestore.collection('Chats/$userId/$toId').add({
@@ -283,6 +288,58 @@ class ChatController extends GetxController {
     } catch (err) {
       print('reject request error is $err');
     }
+  }
+
+  Future<void> accepted(
+    String fromId,
+    String fromMessageId,
+    String toId,
+    String toMessageId,
+  ) async {
+
+    print(postDetails.id);
+    print('');
+    // try {
+    //   print('form $fromId');
+    //   print('formMessageId $fromMessageId');
+    //   print('toMessageId $toId');
+    //   print('toMessageId $toMessageId');
+    //   await _firebaseFirestore
+    //       .collection('Chats/$fromId/$toId')
+    //       .doc(fromMessageId)
+    //       .update({
+    //     'type': 'R',
+    //     'to': toId,
+    //     'from': userId,
+    //     'createdAt': DateTime.now(),
+    //     'message': '1',
+    //     'startDate': startDate.toString(),
+    //     'endDate': endDate.toString(),
+    //     'amount': amountController.text,
+    //     'status': 'R'
+    //   });
+    // } catch (err) {
+    //   print('reject request error is $err');
+    // }
+
+    // try {
+    //   await _firebaseFirestore
+    //       .collection('Chats/$toId/$fromId')
+    //       .doc(toMessageId)
+    //       .update({
+    //     'type': 'R',
+    //     'to': toId,
+    //     'from': userId,
+    //     'createdAt': DateTime.now(),
+    //     'message': '1',
+    //     'startDate': startDate.toString(),
+    //     'endDate': endDate.toString(),
+    //     'amount': amountController.text,
+    //     'status': 'R'
+    //   });
+    // } catch (err) {
+    //   print('reject request error is $err');
+    // }
   }
 
   Future<void> withDrawRequest(

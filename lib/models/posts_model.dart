@@ -12,6 +12,7 @@ class PostsModel {
   late double lng;
   late List<dynamic> imagesUrl;
   late List favorites;
+  late String status;
 
   PostsModel(
       {required this.id,
@@ -26,7 +27,8 @@ class PostsModel {
       required this.lat,
       required this.lng,
       required this.imagesUrl,
-      required this.favorites});
+      required this.favorites,
+      required this.status});
 
   PostsModel.empty() {
     id = '';
@@ -40,6 +42,7 @@ class PostsModel {
     address = '';
     lat = 0.0;
     lng = 0.0;
+    status = '';
     imagesUrl = [];
     favorites = [];
   }

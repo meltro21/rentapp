@@ -258,7 +258,25 @@ class _ChatDetailState extends State<ChatDetail> {
                                                                       primary:
                                                                           Colors
                                                                               .green),
-                                                              onPressed: () {},
+                                                              onPressed: () {
+                                                                chatController.accepted(snapshot.data!
+                                                                              .docs[
+                                                                          index]
+                                                                      ['from'],
+                                                                  snapshot.data!
+                                                                              .docs[
+                                                                          index]
+                                                                      [
+                                                                      'fromMessageId'],
+                                                                  snapshot.data!
+                                                                          .docs[
+                                                                      index]['to'],
+                                                                  snapshot.data!
+                                                                              .docs[
+                                                                          index]
+                                                                      [
+                                                                      'toMessageId'],);
+                                                              },
                                                               child: Text(
                                                                   'Accept')),
                                                           ElevatedButton(

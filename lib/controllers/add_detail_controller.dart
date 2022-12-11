@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:rentapp/controllers/auth_controller.dart';
+import 'package:rentapp/models/user_model.dart';
 
 class AddDetailController extends GetxController {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -14,6 +15,7 @@ class AddDetailController extends GetxController {
   var endDate = DateTime.now().obs;
   User? currentUser;
   String currentUserId = '';
+  UserModel posterInfo = UserModel('', '', '', '', '');
   changeReadMoreValue() {
     readMore.value = !readMore.value;
   }
@@ -40,5 +42,18 @@ class AddDetailController extends GetxController {
       'toUserId': toUserId,
       'createdAt': DateTime.now()
     });
+  }
+
+  Future<UserModel> getPosterInfo(String posterId) async {
+    print('in the get method');
+    var a = await _firestore
+        .collection("Users")
+        .where('userId', isEqualTo: posterId)
+        .get();
+    posterInfo.eamil = a.docs[0]['email'];
+    posterInfo.name = a.docs[0]['name'];
+    print('email is $posterInfo');
+    print("end");
+    return posterInfo;
   }
 }

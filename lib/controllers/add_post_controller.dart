@@ -89,7 +89,8 @@ class AddPostController extends GetxController {
         'lat': lat,
         'lng': lng,
         'userId': userId,
-        'favorites': []
+        'favorites': [],
+        'status': 'pending'
       });
       try {
         await _firestore

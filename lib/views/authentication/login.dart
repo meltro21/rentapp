@@ -85,7 +85,7 @@ class LoginScreen extends StatelessWidget {
                         alignment: Alignment.centerRight,
                         margin:
                             EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                        child: RaisedButton(
+                        child: ElevatedButton(
                           onPressed: () async {
                             if (_form.currentState!.validate()) {
                               bool signIn = await authController
@@ -97,10 +97,10 @@ class LoginScreen extends StatelessWidget {
                               }
                             }
                           },
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(80.0)),
-                          textColor: Colors.white,
-                          padding: const EdgeInsets.all(0),
+                          // shape: RoundedRectangleBorder(
+                          //     borderRadius: BorderRadius.circular(80.0)),
+                          // textColor: Colors.white,
+                          // padding: const EdgeInsets.all(0),
                           child: Container(
                             alignment: Alignment.center,
                             height: 50.0,
