@@ -7,6 +7,7 @@ import 'package:rentapp/controllers/auth_controller.dart';
 import 'package:rentapp/controllers/user_info_controller.dart';
 import 'package:rentapp/views/authentication/login.dart';
 import 'package:rentapp/views/profile/edit_profile.dart';
+import 'package:rentapp/views/profile/sell_orders.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -58,6 +59,37 @@ class _ProfileState extends State<Profile> {
                   ],
                 )
               ]),
+            ),
+
+            //Orders
+            Divider(),
+            InkWell(
+              onTap: () {
+                Get.to(SellOrders());
+              },
+              child: Row(
+                children: [
+                  Text(
+                    'Sell Orders',
+                    style: TextStyle(
+                      color: Colors.grey[400],
+                      fontSize: 22,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(),
+            Row(
+              children: [
+                Text(
+                  'Buy Orders',
+                  style: TextStyle(
+                    color: Colors.grey[400],
+                    fontSize: 22,
+                  ),
+                ),
+              ],
             ),
           ]),
         ),

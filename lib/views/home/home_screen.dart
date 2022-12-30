@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:rentapp/controllers/home_screen_controller.dart';
 import 'package:rentapp/controllers/my_adds_controller.dart';
 import 'package:rentapp/controllers/search_post_controller.dart';
@@ -267,152 +268,212 @@ class _HomeScreenState extends State<HomeScreen> {
                                 crossAxisCount: 2,
                               ),
                               itemBuilder: ((context, index) {
-                                return Container(
-                                  margin: EdgeInsets.only(top: 5),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      // for (int j = 0; j < 2; j++)
-                                      InkWell(
-                                        onTap: () {
-                                          userInfoController.getPostUserAllData(
-                                              homeScreenController
-                                                  .postsList[index].userId);
-                                          Get.to(AddDetailHome(
-                                            postDetails: homeScreenController
-                                                .postsList[(index)],
-                                          ));
-                                        },
-                                        child: Container(
-                                          height:
-                                              mediaHeight * 0.529 / 1.6 - 30,
-                                          width: mediaWidth / 2 - 20,
-                                          padding: EdgeInsets.only(left: 10),
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey[200],
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Image.network(
-                                                homeScreenController
-                                                    .postsList[(index)]
-                                                    .imagesUrl[0],
-                                                fit: BoxFit.fill,
-                                                width: mediaWidth / 2 - 20,
-                                                height:
-                                                    (mediaHeight * 0.529 / 2) /
-                                                        1.5,
-                                              ),
-                                              SizedBox(
-                                                height:
-                                                    mediaHeight * 0.3 * 0.01,
-                                              ),
-                                              Row(children: [
-                                                Text(homeScreenController
-                                                    .postsList[(index)]
-                                                    .subCategory
-                                                    .toUpperCase()),
-                                                Expanded(child: SizedBox()),
-                                                Obx(
-                                                  () => homeScreenController
-                                                                  .favorites[
-                                                              index] ==
-                                                          false
-                                                      ? InkWell(
-                                                          onTap: () {
-                                                            // print(
-                                                            //     'button pressed1');
-                                                            // int index =
+                                print(
+                                    'status is ${homeScreenController.postsList[index].status}');
+                                return Opacity(
+                                  opacity: homeScreenController
+                                              .postsList[(index)].status ==
+                                          'rented'
+                                      ? 0.5
+                                      : 1,
+                                  child: Container(
+                                    margin: EdgeInsets.only(top: 5),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        // for (int j = 0; j < 2; j++)
+                                        InkWell(
+                                          onTap: () {
+                                            userInfoController
+                                                .getPostUserAllData(
+                                                    homeScreenController
+                                                        .postsList[index]
+                                                        .userId);
+                                            Get.to(AddDetailHome(
+                                              postDetails: homeScreenController
+                                                  .postsList[(index)],
+                                            ));
+                                          },
+                                          child: Container(
+                                            height:
+                                                mediaHeight * 0.529 / 1.6 - 30,
+                                            width: mediaWidth / 2 - 20,
+                                            padding: EdgeInsets.only(left: 10),
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey[200],
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Image.network(
+                                                  homeScreenController
+                                                      .postsList[(index)]
+                                                      .imagesUrl[0],
+                                                  fit: BoxFit.fill,
+                                                  width: mediaWidth / 2 - 20,
+                                                  height: (mediaHeight *
+                                                          0.529 /
+                                                          2) /
+                                                      1.5,
+                                                ),
+                                                SizedBox(
+                                                  height:
+                                                      mediaHeight * 0.3 * 0.01,
+                                                ),
+                                                Row(children: [
+                                                  Text(homeScreenController
+                                                      .postsList[(index)]
+                                                      .subCategory
+                                                      .toUpperCase()),
+                                                  Expanded(child: SizedBox()),
+                                                  Obx(
+                                                    () => homeScreenController
+                                                                    .favorites[
+                                                                index] ==
+                                                            false
+                                                        ? InkWell(
+                                                            onTap: () {
+                                                              // print(
+                                                              //     'button pressed1');
+                                                              // int index =
 
-                                                            // FeaturedDeals
-                                                            //     likedAdd =
-                                                            //     homeScreenController
-                                                            //             .featuredDeals[
-                                                            //         index];
+                                                              // FeaturedDeals
+                                                              //     likedAdd =
+                                                              //     homeScreenController
+                                                              //             .featuredDeals[
+                                                              //         index];
 
-                                                            // homeScreenController
-                                                            //     .addToFavorites(
-                                                            //         index);
-                                                            // myAddsController
-                                                            //     .addToFavourites(
-                                                            //         likedAdd);
+                                                              // homeScreenController
+                                                              //     .addToFavorites(
+                                                              //         index);
+                                                              // myAddsController
+                                                              //     .addToFavourites(
+                                                              //         likedAdd);
 
-                                                            homeScreenController
-                                                                .addTo(index);
-                                                          },
-                                                          child: Icon(Icons
-                                                              .favorite_border))
-                                                      : InkWell(
-                                                          onTap: () {
-                                                            // int index =
-                                                            //     j % 2 + i * 2;
-                                                            // print(
-                                                            //     'button pressed1 index is $index');
+                                                              homeScreenController
+                                                                  .addTo(index);
+                                                            },
+                                                            child: Icon(Icons
+                                                                .favorite_border))
+                                                        : InkWell(
+                                                            onTap: () {
+                                                              // int index =
+                                                              //     j % 2 + i * 2;
+                                                              // print(
+                                                              //     'button pressed1 index is $index');
 
-                                                            // FeaturedDeals
-                                                            //     likedAdd =
-                                                            //     homeScreenController
-                                                            //             .featuredDeals[
-                                                            //         index];
-                                                            // homeScreenController
-                                                            //     .addToFavorites(
-                                                            //         index);
-                                                            // myAddsController
-                                                            //     .removeFromFavouritesUsingHomeScreen(
-                                                            //         likedAdd
-                                                            //             .id);
-                                                            homeScreenController
-                                                                .removeTo(
-                                                                    index);
-                                                          },
-                                                          child: Icon(
-                                                            Icons.favorite,
-                                                            color: Colors.red,
+                                                              // FeaturedDeals
+                                                              //     likedAdd =
+                                                              //     homeScreenController
+                                                              //             .featuredDeals[
+                                                              //         index];
+                                                              // homeScreenController
+                                                              //     .addToFavorites(
+                                                              //         index);
+                                                              // myAddsController
+                                                              //     .removeFromFavouritesUsingHomeScreen(
+                                                              //         likedAdd
+                                                              //             .id);
+                                                              homeScreenController
+                                                                  .removeTo(
+                                                                      index);
+                                                            },
+                                                            child: Icon(
+                                                              Icons.favorite,
+                                                              color: Colors.red,
+                                                            ),
                                                           ),
-                                                        ),
+                                                  ),
+                                                ]),
+                                                SizedBox(
+                                                  height:
+                                                      mediaHeight * 0.3 * 0.02,
                                                 ),
-                                              ]),
-                                              SizedBox(
-                                                height:
-                                                    mediaHeight * 0.3 * 0.02,
-                                              ),
-                                              Text(
-                                                'Rs ${homeScreenController.postsList[(index)].price.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.bold),
-                                              ),
-                                              SizedBox(
-                                                height:
-                                                    mediaHeight * 0.3 * 0.01,
-                                              ),
-                                              Expanded(
-                                                child: Text(
-                                                  '📍${homeScreenController.postsList[(index)].address}',
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style:
-                                                      TextStyle(fontSize: 12),
+                                                Text(
+                                                  'Rs ${homeScreenController.postsList[(index)].price.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
                                                 ),
-                                              ),
-                                              // Row(children: [
+                                                SizedBox(
+                                                  height:
+                                                      mediaHeight * 0.3 * 0.01,
+                                                ),
+                                                Expanded(
+                                                  child: Text(
+                                                    '📍${homeScreenController.postsList[index].address}',
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style:
+                                                        TextStyle(fontSize: 12),
+                                                  ),
+                                                ),
+                                                // homeScreenController
+                                                //             .postsList[(index)]
+                                                //             .status ==
+                                                //         'rented'
+                                                //     ? Text(
+                                                //         'Duration',
+                                                //         style: TextStyle(
+                                                //             fontWeight:
+                                                //                 FontWeight.bold,
+                                                //             color: Colors.grey),
+                                                //       )
+                                                //     : SizedBox(),
+                                                // homeScreenController
+                                                //             .postsList[(index)]
+                                                //             .status ==
+                                                //         'rented'
+                                                //     ? Row(children: [
+                                                //         Text(
+                                                //           DateFormat(
+                                                //                   'd MMM yyyy')
+                                                //               .format(DateTime.parse(
+                                                //                   homeScreenController
+                                                //                       .postsList[
+                                                //                           index]
+                                                //                       .startDate)),
+                                                //           style: TextStyle(
+                                                //               fontSize: 12,
+                                                //               color:
+                                                //                   Colors.grey),
+                                                //         ),
+                                                //         SizedBox(
+                                                //           width: 10,
+                                                //         ),
+                                                //         Text(
+                                                //           DateFormat(
+                                                //                   'd MMM yyyy')
+                                                //               .format(DateTime.parse(
+                                                //                   homeScreenController
+                                                //                       .postsList[
+                                                //                           index]
+                                                //                       .endDate)),
+                                                //           style: TextStyle(
+                                                //               fontSize: 12,
+                                                //               color:
+                                                //                   Colors.grey),
+                                                //         ),
+                                                //       ])
+                                                //     : SizedBox(),
+                                                // Row(children: [
 
-                                              //   Text(
-                                              //     '18 May',
-                                              //     style:
-                                              //         TextStyle(fontSize: 12),
-                                              //   )
-                                              // ]),
-                                            ],
+                                                //   Text(
+                                                //     '18 May',
+                                                //     style:
+                                                //         TextStyle(fontSize: 12),
+                                                //   )
+                                                // ]),
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 );
                               }))

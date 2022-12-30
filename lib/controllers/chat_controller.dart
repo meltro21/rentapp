@@ -10,11 +10,13 @@ class ChatController extends GetxController {
   late User user;
   String userId = FirebaseAuth.instance.currentUser!.uid;
   FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-  late PostsModel postDetails;
+  Rx<PostsModel> selectedAdDetails = PostsModel.empty().obs;
   TextEditingController amountController = TextEditingController();
 
   TextEditingController messageController = TextEditingController();
   UserInfoController userInfoController = Get.find();
+
+  RxList<PostsModel> postsList = <PostsModel>[].obs;
 
   var startDate = DateTime.now().obs;
   var endDate = DateTime.now().obs;
@@ -171,6 +173,8 @@ class ChatController extends GetxController {
   Future<void> submitRequest(String toId) async {
     Get.back();
     print('submit');
+    print(startDate);
+    print(endDate);
 
     var diff = startDate.value.difference(endDate.value);
 
@@ -187,7 +191,11 @@ class ChatController extends GetxController {
         'startDate': startDate.toString(),
         'endDate': endDate.toString(),
         'amount': amountController.text,
-        'status': 'P'
+        'status': 'P',
+        'adId': selectedAdDetails.value.id,
+        'imgUrl': selectedAdDetails.value.imagesUrl[0],
+        'price': selectedAdDetails.value.price,
+        'subCategory': selectedAdDetails.value.subCategory
       });
 
       var toMessageId =
@@ -200,7 +208,11 @@ class ChatController extends GetxController {
         'message': '1',
         'startDate': startDate.toString(),
         'endDate': endDate.toString(),
-        'amount': amountController.text
+        'amount': amountController.text,
+        'adId': selectedAdDetails.value.id,
+        'imgUrl': selectedAdDetails.value.imagesUrl[0],
+        'price': selectedAdDetails.value.price,
+        'subCategory': selectedAdDetails.value.subCategory
       });
 
       await _firebaseFirestore
@@ -217,7 +229,11 @@ class ChatController extends GetxController {
         'amount': amountController.text,
         'status': 'P',
         'fromMessageId': fromMessageId.id,
-        'toMessageId': toMessageId.id
+        'toMessageId': toMessageId.id,
+        'adId': selectedAdDetails.value.id,
+        'imgUrl': selectedAdDetails.value.imagesUrl[0],
+        'price': selectedAdDetails.value.price,
+        'subCategory': selectedAdDetails.value.subCategory
       });
 
       await _firebaseFirestore
@@ -234,7 +250,11 @@ class ChatController extends GetxController {
         'endDate': endDate.toString(),
         'amount': amountController.text,
         'fromMessageId': fromMessageId.id,
-        'toMessageId': toMessageId.id
+        'toMessageId': toMessageId.id,
+        'adId': selectedAdDetails.value.id,
+        'imgUrl': selectedAdDetails.value.imagesUrl[0],
+        'price': selectedAdDetails.value.price,
+        'subCategory': selectedAdDetails.value.subCategory
       });
       //Get.back();
     } catch (err) {}
@@ -290,15 +310,9 @@ class ChatController extends GetxController {
     }
   }
 
-  Future<void> accepted(
-    String fromId,
-    String fromMessageId,
-    String toId,
-    String toMessageId,
-  ) async {
-
-    print(postDetails.id);
-    print('');
+  Future<void> accepted(String adId, String fromId, String fromMessageId,
+      String toId, String toMessageId, String startDate, String endDate) async {
+    print('start accepted:');
     // try {
     //   print('form $fromId');
     //   print('formMessageId $fromMessageId');
@@ -340,6 +354,17 @@ class ChatController extends GetxController {
     // } catch (err) {
     //   print('reject request error is $err');
     // }
+    print('ad id is $adId');
+    print('toid is $toId');
+    print('from id is $fromId');
+    try {
+      await _firebaseFirestore.collection('Posts').doc(adId).update({
+        "status": "rented",
+        "renteeId": fromId,
+        "startDate": startDate,
+        "endDate": endDate
+      });
+    } catch (err) {}
   }
 
   Future<void> withDrawRequest(
@@ -388,6 +413,40 @@ class ChatController extends GetxController {
       });
     } catch (err) {
       print('submit request error is $err');
+    }
+  }
+
+  Future<void> getAllAds(String userId) async {
+    print("Start getAllAds:");
+    print("id is $userId");
+
+    postsList.clear();
+    try {
+      var posts = await _firebaseFirestore
+          .collection('Posts')
+          .where('userId', isEqualTo: userId)
+          .where('status', isEqualTo: 'approved')
+          .get();
+      print('posts is $posts');
+      for (int i = 0; i < posts.docs.length; i++) {
+        PostsModel temp = PostsModel.empty();
+        temp.id = posts.docs[i]['id'];
+        temp.category = posts.docs[i]['category'];
+        temp.subCategory = posts.docs[i]['subCategory'];
+        temp.price = posts.docs[i]['price'];
+        temp.model = posts.docs[i]['model'];
+        temp.description = posts.docs[i]['description'];
+        temp.imagesUrl = posts.docs[i]['imagesUrl'];
+        temp.address = posts.docs[i]['address'];
+        temp.lat = posts.docs[i]['lat'];
+        temp.lng = posts.docs[i]['lng'];
+        temp.userId = posts.docs[i]['userId'];
+        temp.status = posts.docs[i]['status'];
+        //temp.createdAt = posts.docs[i]['createdAt'];
+        postsList.add(temp);
+      }
+    } catch (err) {
+      print('getPost error $err');
     }
   }
 }

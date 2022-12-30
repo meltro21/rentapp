@@ -62,6 +62,9 @@ class HomeScreenController extends GetxController {
           temp.userId = posts.docs[i]['userId'];
           //temp.createdAt = posts.docs[i]['createdAt'];
           temp.favorites = posts.docs[i]['favorites'];
+          temp.status = posts.docs[i]['status'];
+          temp.startDate = posts.docs[i]['startDate'];
+          temp.endDate = posts.docs[i]['endDate'];
           postsList.add(temp);
 
           if (temp.favorites.contains(userId)) {

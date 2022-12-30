@@ -173,7 +173,7 @@ class _MyAdsState extends State<MyAds> {
                                       child: Container(
                                         color: myAddsController
                                                 .postsList[index].status=="approved"?  Colors.green:myAddsController
-                                                .postsList[index].status=="rejected"?Colors.red:Colors.yellow,
+                                                .postsList[index].status=="rejected"?Colors.red:myAddsController.postsList[index].status=="rented"?Colors.orange:Colors.yellow,
                                         child: Text(myAddsController
                                                 .postsList[index].status),
                                       ),

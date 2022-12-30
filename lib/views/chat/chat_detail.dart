@@ -9,6 +9,7 @@ import 'package:intl/intl.dart';
 import 'package:rentapp/controllers/chat_controller.dart';
 import 'package:rentapp/controllers/user_info_controller.dart';
 import 'package:rentapp/models/posts_model.dart';
+import 'package:rentapp/views/chat/all_ads.dart';
 
 class ChatDetail extends StatefulWidget {
   // PostsModel postDetails;
@@ -203,7 +204,7 @@ class _ChatDetailState extends State<ChatDetail> {
                                 snapshot.data!.docs[index]['status'] == 'P'
                                     ? Container(
                                         margin: EdgeInsets.only(bottom: 5),
-                                        height: mediaHeight * 0.2,
+                                        height: mediaHeight * 0.25,
                                         //color: Colors.red,
                                         alignment: Alignment.center,
                                         child: Container(
@@ -218,6 +219,39 @@ class _ChatDetailState extends State<ChatDetail> {
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
                                               children: [
+                                                //Add Details
+                                                Row(children: [
+                                                  Image.network(
+                                                    snapshot.data!.docs[index]
+                                                        ['imgUrl'],
+                                                    width: 50,
+                                                    height: 50,
+                                                  ),
+                                                  SizedBox(
+                                                    width: 10,
+                                                  ),
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        snapshot.data!
+                                                                .docs[index]
+                                                            ['subCategory'],
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Text(
+                                                          'Rs. ${snapshot.data!.docs[index]['price']}')
+                                                    ],
+                                                  ),
+                                                ]),
                                                 Text(
                                                   'Rent Request',
                                                   style: TextStyle(
@@ -235,7 +269,7 @@ class _ChatDetailState extends State<ChatDetail> {
                                                   height: 5,
                                                 ),
                                                 Text(
-                                                    'End Date   : ${DateFormat('d MMM yyyy').format(DateTime.parse(snapshot.data!.docs[index]['startDate']))}'),
+                                                    'End Date   : ${DateFormat('d MMM yyyy').format(DateTime.parse(snapshot.data!.docs[index]['endDate']))}'),
                                                 SizedBox(
                                                   height: 5,
                                                 ),
@@ -259,7 +293,13 @@ class _ChatDetailState extends State<ChatDetail> {
                                                                           Colors
                                                                               .green),
                                                               onPressed: () {
-                                                                chatController.accepted(snapshot.data!
+                                                                chatController
+                                                                    .accepted(
+                                                                  snapshot.data!
+                                                                              .docs[
+                                                                          index]
+                                                                      ['adId'],
+                                                                  snapshot.data!
                                                                               .docs[
                                                                           index]
                                                                       ['from'],
@@ -275,7 +315,18 @@ class _ChatDetailState extends State<ChatDetail> {
                                                                               .docs[
                                                                           index]
                                                                       [
-                                                                      'toMessageId'],);
+                                                                      'toMessageId'],
+                                                                  snapshot.data!
+                                                                              .docs[
+                                                                          index]
+                                                                      [
+                                                                      'startDate'],
+                                                                  snapshot.data!
+                                                                              .docs[
+                                                                          index]
+                                                                      [
+                                                                      'endDate'],
+                                                                );
                                                               },
                                                               child: Text(
                                                                   'Accept')),
@@ -414,7 +465,7 @@ class _ChatDetailState extends State<ChatDetail> {
                                                           height: 5,
                                                         ),
                                                         Text(
-                                                            'End Date   : ${DateFormat('d MMM yyyy').format(DateTime.parse(snapshot.data!.docs[index]['startDate']))}'),
+                                                            'End Date   : ${DateFormat('d MMM yyyy').format(DateTime.parse(snapshot.data!.docs[index]['endDate']))}'),
                                                         SizedBox(
                                                           height: 5,
                                                         ),
@@ -556,7 +607,10 @@ class _ChatDetailState extends State<ChatDetail> {
                   children: <Widget>[
                     GestureDetector(
                       onTap: () {
-                        showBookingOption(mediaHeight, mediaWidth);
+                        showBookingOption(mediaHeight, mediaWidth, widget.toId);
+                        //chatController.getAllAds(widget.toId);
+                        //showAllAds();
+                        //Get.to(AllAds(toId: widget.toId));
                         print('Hello');
                       },
                       child: Container(
@@ -637,7 +691,13 @@ class _ChatDetailState extends State<ChatDetail> {
     }
   }
 
-  showBookingOption(mediaHeight, mediaWidth) {
+  customUpdateBookingOption() {
+    //TODO the ui is not updating when the add is selected, fix it.
+    Get.back();
+    showBookingOption(700, 300, widget.toId);
+  }
+
+  showBookingOption(mediaHeight, mediaWidth, toId) {
     Get.bottomSheet(BottomSheet(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         onClosing: () {},
@@ -650,6 +710,77 @@ class _ChatDetailState extends State<ChatDetail> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      //selected add Details
+                      chatController.selectedAdDetails.value.id == ''
+                          ? InkWell(
+                              onTap: () {
+                                Get.to(AllAds(toId: toId));
+                              },
+                              child: Container(
+                                height: mediaHeight * 0.1,
+                                width: mediaWidth,
+                                color: Colors.grey[200],
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[400],
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(50),
+                                    ),
+                                  ),
+                                  child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Icon(
+                                          Icons.add,
+                                          color: Colors.white,
+                                        ),
+                                        Text(
+                                          'Select an Add',
+                                          style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ]),
+                                ),
+                              ),
+                            )
+                          : InkWell(
+                              onTap: () {
+                                Get.to(AllAds(toId: toId));
+                              },
+                              child: Row(children: [
+                                Image.network(
+                                  chatController
+                                      .selectedAdDetails.value.imagesUrl[0],
+                                  width: 50,
+                                  height: 50,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      chatController
+                                          .selectedAdDetails.value.subCategory,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    Text(
+                                        'Rs. ${chatController.selectedAdDetails.value.price.toString()}')
+                                  ],
+                                ),
+                              ]),
+                            ),
+
+                      //Other Details
                       Center(
                         child: Container(
                           margin: EdgeInsets.only(top: 10),

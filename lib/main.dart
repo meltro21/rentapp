@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: LoginScreen());
+        home: MyHomePage());
   }
 }
 
@@ -49,7 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
     MyAds(),
     AddPost(),
     ChatHome(),
-    PendingAds()
+    Profile()
   ];
 
   @override

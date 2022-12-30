@@ -50,6 +50,7 @@ dependencies:
   google_maps_flutter: ^2.1.2
   cached_network_image: ^3.2.1
   loading_overlay: ^0.3.0
+  expansion_tile_card: ^2.0.0
 
   
 dev_dependencies:

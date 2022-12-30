@@ -13,6 +13,9 @@ class PostsModel {
   late List<dynamic> imagesUrl;
   late List favorites;
   late String status;
+  late String renteeId;
+  late String startDate;
+  late String endDate;
 
   PostsModel(
       {required this.id,
@@ -28,7 +31,10 @@ class PostsModel {
       required this.lng,
       required this.imagesUrl,
       required this.favorites,
-      required this.status});
+      required this.status,
+      required this.renteeId,
+      required this.startDate,
+      required this.endDate});
 
   PostsModel.empty() {
     id = '';
@@ -45,5 +51,8 @@ class PostsModel {
     status = '';
     imagesUrl = [];
     favorites = [];
+    renteeId = '';
+    startDate = '';
+    endDate = '';
   }
 }

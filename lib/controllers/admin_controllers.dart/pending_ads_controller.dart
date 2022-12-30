@@ -9,11 +9,7 @@ class PendingAdsController extends GetxController {
   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
 
-  var items = [
-    'pending',
-    'approved',
-    'rejected',
-  ];
+  var items = ['pending', 'approved', 'rejected', 'rented'];
   List<String> dropdownvalue = [];
 
   getPosts() async {
