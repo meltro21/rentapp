@@ -112,6 +112,41 @@ class AuthController extends GetxController {
     return true;
   }
 
+  Future<bool> forgotPassword(String email) async {
+    loading.value = true;
+    try {
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: email)
+          .then((value) {
+        String s = "Password reset link is send to ${email}";
+        Get.showSnackbar(GetSnackBar(
+          title: 'Success',
+          message: 'Password Reset Link is sent successfully',
+          duration: Duration(seconds: 3),
+          borderColor: Colors.green,
+          backgroundColor: Colors.green,
+        ));
+
+        //Navigator.pop(context);
+      }).catchError((onError) {
+        print("Error is $onError");
+        String s = "Unable to send link, Error: $onError";
+        Get.showSnackbar(GetSnackBar(
+          title: 'Failure',
+          message: 'Unable to send password reset link',
+          duration: Duration(seconds: 3),
+          borderColor: Colors.green,
+          backgroundColor: Colors.red,
+        ));
+      });
+    } catch (err) {
+      loading.value = false;
+      print('signIN error is $err');
+    }
+    loading.value = false;
+    return true;
+  }
+
   Future<bool> logout() async {
     try {
       await _auth.signOut();

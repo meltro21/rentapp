@@ -736,74 +736,79 @@ class _ChatDetailState extends State<ChatDetail> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       //selected add Details
-                      chatController.selectedAdDetails.value.id == ''
-                          ? InkWell(
-                              onTap: () {
-                                Get.to(AllAds(toId: toId));
-                              },
-                              child: Container(
-                                height: mediaHeight * 0.1,
-                                width: mediaWidth,
-                                color: Colors.grey[200],
+                      Obx(
+                        () => chatController.selectedAdDetails.value.id == ''
+                            ? InkWell(
+                                onTap: () {
+                                  Get.to(AllAds(toId: toId));
+                                },
                                 child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[400],
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(50),
+                                  height: mediaHeight * 0.1,
+                                  width: mediaWidth,
+                                  color: Colors.grey[200],
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey[400],
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(50),
+                                      ),
                                     ),
-                                  ),
-                                  child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: const [
-                                        Icon(
-                                          Icons.add,
-                                          color: Colors.white,
-                                        ),
-                                        Text(
-                                          'Select an Add',
-                                          style: TextStyle(
+                                    child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: const [
+                                          Icon(
+                                            Icons.add,
                                             color: Colors.white,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
                                           ),
-                                        ),
-                                      ]),
+                                          Text(
+                                            'Select an Add',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ]),
+                                  ),
                                 ),
-                              ),
-                            )
-                          : InkWell(
-                              onTap: () {
-                                Get.to(AllAds(toId: toId));
-                              },
-                              child: Row(children: [
-                                Image.network(
-                                  chatController
-                                      .selectedAdDetails.value.imagesUrl[0],
-                                  width: 50,
-                                  height: 50,
-                                ),
-                                SizedBox(
-                                  width: 10,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
+                              )
+                            : InkWell(
+                                onTap: () {
+                                  Get.to(AllAds(toId: toId));
+                                },
+                                child: Obx(
+                                  () => Row(children: [
+                                    Image.network(
                                       chatController
-                                          .selectedAdDetails.value.subCategory,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500),
+                                          .selectedAdDetails.value.imagesUrl[0],
+                                      width: 50,
+                                      height: 50,
                                     ),
                                     SizedBox(
-                                      height: 5,
+                                      width: 10,
                                     ),
-                                    Text(
-                                        'Rs. ${chatController.selectedAdDetails.value.price.toString()}')
-                                  ],
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          chatController.selectedAdDetails.value
+                                              .subCategory,
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        Text(
+                                            'Rs. ${chatController.selectedAdDetails.value.price.toString()}')
+                                      ],
+                                    ),
+                                  ]),
                                 ),
-                              ]),
-                            ),
+                              ),
+                      ),
 
                       //Other Details
                       Center(
@@ -896,8 +901,8 @@ class _ChatDetailState extends State<ChatDetail> {
                         height: 20,
                       ),
                       InkWell(
-                        onTap: () {
-                          chatController.submitRequest(widget.toId);
+                        onTap: () async {
+                          await chatController.submitRequest(widget.toId);
                           chatController.clearDataAfterSubmit();
                         },
                         child: Center(

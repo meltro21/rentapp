@@ -96,7 +96,8 @@ class UserInfoController extends GetxController {
         'toId': toId,
         'fromId': fromId,
         'rating': rating.value,
-        'description': descriptionController.text
+        'description': descriptionController.text,
+        'name': currentUserInfo.name
       });
       rating.value = 0;
       descriptionController.clear();

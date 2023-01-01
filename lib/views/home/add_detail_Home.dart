@@ -373,8 +373,44 @@ class _AddDetailHomeState extends State<AddDetailHome> {
                                   ),
                                   Divider(),
                                   SizedBox(
-                                    height: mediaHeight * 0.05,
+                                    height: mediaHeight * 0.01,
                                   ),
+                                  Column(
+                                    children: [
+                                      for (int i = 0;
+                                          i <
+                                              addDetailController
+                                                  .feedbackList.length;
+                                          i++)
+                                        Column(children: [
+                                          Row(children: [
+                                            Text(
+                                              addDetailController
+                                                  .feedbackList[i].name,
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Icon(
+                                              Icons.star,
+                                              color: Colors.orange[400],
+                                            ),
+                                            Text(
+                                              addDetailController
+                                                  .feedbackList[i].rating
+                                                  .toString(),
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ]),
+                                          Text(addDetailController
+                                              .feedbackList[i].feedback),
+                                          Divider(),
+                                        ]),
+                                    ],
+                                  )
                                   // ListView.builder(
                                   //     itemBuilder: ((context, index) {
                                   //   return Row(

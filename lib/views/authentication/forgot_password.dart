@@ -8,11 +8,11 @@ import 'package:rentapp/views/authentication/forgot_password.dart';
 import 'package:rentapp/views/authentication/register.dart';
 import 'package:rentapp/views/home/home_screen.dart';
 
-class LoginScreen extends StatelessWidget {
+class ForgotPassword extends StatelessWidget {
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+
   final _form = GlobalKey<FormState>();
-  AuthController authController = Get.put(AuthController());
+  AuthController authController = Get.find();
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class LoginScreen extends StatelessWidget {
                         alignment: Alignment.centerLeft,
                         padding: EdgeInsets.symmetric(horizontal: 40),
                         child: Text(
-                          "LOGIN",
+                          "Forgot Password",
                           style: TextStyle(
                               fontWeight: FontWeight.bold,
                               color: Color(0xFF2661FA),
@@ -56,36 +56,36 @@ class LoginScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: size.height * 0.03),
-                      Container(
-                        alignment: Alignment.center,
-                        margin: EdgeInsets.symmetric(horizontal: 40),
-                        child: TextFormField(
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Enter password';
-                            }
-                            return null;
-                          },
-                          controller: passwordController,
-                          decoration: InputDecoration(labelText: "Password"),
-                          obscureText: true,
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Get.to(ForgotPassword());
-                        },
-                        child: Container(
-                          alignment: Alignment.centerRight,
-                          margin: EdgeInsets.symmetric(
-                              horizontal: 40, vertical: 10),
-                          child: Text(
-                            "Forgot your password?",
-                            style: TextStyle(
-                                fontSize: 12, color: Color(0XFF2661FA)),
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   alignment: Alignment.center,
+                      //   margin: EdgeInsets.symmetric(horizontal: 40),
+                      //   child: TextFormField(
+                      //     validator: (value) {
+                      //       if (value == null || value.isEmpty) {
+                      //         return 'Enter password';
+                      //       }
+                      //       return null;
+                      //     },
+                      //     controller: passwordController,
+                      //     decoration: InputDecoration(labelText: "Password"),
+                      //     obscureText: true,
+                      //   ),
+                      // ),
+                      // InkWell(
+                      //   onTap: () {
+                      //     Get.to(ForgotPassword());
+                      //   },
+                      //   child: Container(
+                      //     alignment: Alignment.centerRight,
+                      //     margin: EdgeInsets.symmetric(
+                      //         horizontal: 40, vertical: 10),
+                      //     child: Text(
+                      //       "Forgot your password?",
+                      //       style: TextStyle(
+                      //           fontSize: 12, color: Color(0XFF2661FA)),
+                      //     ),
+                      //   ),
+                      // ),
                       SizedBox(height: size.height * 0.02),
                       Align(
                         alignment: Alignment.topRight,
@@ -94,43 +94,41 @@ class LoginScreen extends StatelessWidget {
                           child: ElevatedButton(
                             onPressed: () async {
                               if (_form.currentState!.validate()) {
-                                bool signIn = await authController
-                                    .signInWithEmailAndPassword(
-                                        emailController.text,
-                                        passwordController.text);
-                                if (signIn) {
-                                  Get.to(MyHomePage());
-                                }
+                                bool signIn =
+                                    await authController.forgotPassword(
+                                  emailController.text,
+                                );
+                                emailController.clear();
                               }
                             },
                             child: Text(
-                              "LOGIN",
+                              "Send Reset Link",
                               textAlign: TextAlign.center,
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                         ),
                       ),
-                      Container(
-                        alignment: Alignment.centerRight,
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                        child: GestureDetector(
-                          onTap: () => {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => RegisterScreen()))
-                          },
-                          child: Text(
-                            "Don't Have an Account? Sign up",
-                            style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xFF2661FA)),
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   alignment: Alignment.centerRight,
+                      //   margin:
+                      //       EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                      //   child: GestureDetector(
+                      //     onTap: () => {
+                      //       Navigator.push(
+                      //           context,
+                      //           MaterialPageRoute(
+                      //               builder: (context) => RegisterScreen()))
+                      //     },
+                      //     child: Text(
+                      //       "Don't Have an Account? Sign up",
+                      //       style: TextStyle(
+                      //           fontSize: 12,
+                      //           fontWeight: FontWeight.bold,
+                      //           color: Color(0xFF2661FA)),
+                      //     ),
+                      //   ),
+                      // ),
                       SizedBox(
                         height: 20,
                       ),

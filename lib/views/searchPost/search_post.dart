@@ -289,12 +289,12 @@ class _SearchPostState extends State<SearchPost> {
                                             //   width: mediaWidth * 0.3,
                                             // ),
                                           ),
-                                          Positioned(
-                                            child: Container(
-                                              color: Colors.yellow,
-                                              child: Text('Pending'),
-                                            ),
-                                          ),
+                                          // Positioned(
+                                          //   child: Container(
+                                          //     color: Colors.yellow,
+                                          //     child: Text('Pending'),
+                                          //   ),
+                                          // ),
                                         ]),
                                         SizedBox(
                                           width: 10,

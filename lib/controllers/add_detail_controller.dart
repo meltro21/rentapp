@@ -49,6 +49,7 @@ class AddDetailController extends GetxController {
   }
 
   Future<UserModel> getPosterInfo(String posterId) async {
+    feedbackList.clear();
     print('in the get method');
     var a = await _firestore
         .collection("Users")
@@ -68,6 +69,7 @@ class AddDetailController extends GetxController {
       FeedbackModel temp = FeedbackModel.empty();
       temp.rating = feedback.docs[i]['rating'];
       temp.feedback = feedback.docs[i]['description'];
+      temp.name = feedback.docs[i]['name'];
 
       feedbackList.add(temp);
       sum += temp.rating;

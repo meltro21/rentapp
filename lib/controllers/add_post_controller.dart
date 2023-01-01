@@ -59,16 +59,19 @@ class AddPostController extends GetxController {
   }
 
   void setGooglePlaceApiKey() {
-    String apiKey = "AIzaSyCcAsVWMa5EasKOmtXFMXaZgbILGBLrG0w";
+    String apiKey = "AIzaSyDhttJnwCNOI-1_TO_jPKQcoDokxgkcekQ";
     googlePlace = GooglePlace(apiKey);
   }
 
   void autoCompleteSearch(String value) async {
     print('start autoComplete');
-    var result = await googlePlace.autocomplete.get(value);
+    var result = await googlePlace.autocomplete.get(value, strictbounds: false);
+    print('outer result is $result');
     if (result != null) {
       predictions.value = result.predictions!;
       print('predictions length is ${predictions}');
+    } else {
+      print('result is  ${result}');
     }
   }
 
@@ -90,7 +93,9 @@ class AddPostController extends GetxController {
         'lng': lng,
         'userId': userId,
         'favorites': [],
-        'status': 'pending'
+        'status': 'pending',
+        'startDate': '',
+        'endDate': ''
       });
       try {
         await _firestore

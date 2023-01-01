@@ -172,14 +172,17 @@ class ChatController extends GetxController {
 
   Future<void> submitRequest(String toId) async {
     Get.back();
+
     print('submit');
+    print('fromId is $userId toId is $toId');
     print(startDate);
     print(endDate);
 
     var diff = startDate.value.difference(endDate.value);
-
+    String imageUrl = selectedAdDetails.value.imagesUrl[0];
     print('diff in hours ${diff.inHours}');
 
+    print('selectedAdDetails ${selectedAdDetails.value.imagesUrl[0]}');
     try {
       var fromMessageId =
           await _firebaseFirestore.collection('Chats/$userId/$toId').add({
@@ -193,7 +196,7 @@ class ChatController extends GetxController {
         'amount': amountController.text,
         'status': 'P',
         'adId': selectedAdDetails.value.id,
-        'imgUrl': selectedAdDetails.value.imagesUrl[0],
+        'imgUrl': imageUrl,
         'price': selectedAdDetails.value.price,
         'subCategory': selectedAdDetails.value.subCategory
       });
@@ -210,10 +213,12 @@ class ChatController extends GetxController {
         'endDate': endDate.toString(),
         'amount': amountController.text,
         'adId': selectedAdDetails.value.id,
-        'imgUrl': selectedAdDetails.value.imagesUrl[0],
+        'imgUrl': imageUrl,
         'price': selectedAdDetails.value.price,
         'subCategory': selectedAdDetails.value.subCategory
       });
+
+      //print('selectedAdDetails ${selectedAdDetails.value.imagesUrl[0]}');
 
       await _firebaseFirestore
           .collection('Chats/$userId/$toId')
@@ -257,7 +262,9 @@ class ChatController extends GetxController {
         'subCategory': selectedAdDetails.value.subCategory
       });
       //Get.back();
-    } catch (err) {}
+    } catch (err) {
+      print('err is $err');
+    }
   }
 
   Future<void> rejected(

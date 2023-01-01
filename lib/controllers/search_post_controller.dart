@@ -22,6 +22,7 @@ class SearchPostController extends GetxController {
   String searchItem = '';
 
   getPosts(String query) async {
+    print('search item get Post');
     loading.value = true;
     postsList.clear();
     query = query.toLowerCase();
@@ -46,6 +47,7 @@ class SearchPostController extends GetxController {
         posts = await _firebaseFirestore
             .collection('Posts')
             .where('subCategory', isEqualTo: query)
+            .where('status', isEqualTo: 'approved')
             .get();
       }
 
