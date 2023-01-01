@@ -413,20 +413,29 @@ class _ChatDetailState extends State<ChatDetail> {
                                         ),
                                       )
                                     : snapshot.data!.docs[index]['status'] ==
-                                            'R'
+                                                'R' ||
+                                            snapshot.data!.docs[index]
+                                                    ['status'] ==
+                                                'A'
                                         ? IgnorePointer(
                                             ignoring: snapshot.data!.docs[index]
-                                                        ['status'] ==
-                                                    'R'
+                                                            ['status'] ==
+                                                        'R' ||
+                                                    snapshot.data!.docs[index]
+                                                            ['status'] ==
+                                                        'A'
                                                 ? true
                                                 : false,
                                             child: Opacity(
-                                              opacity:
-                                                  snapshot.data!.docs[index]
+                                              opacity: snapshot.data!
+                                                                  .docs[index]
                                                               ['status'] ==
-                                                          'R'
-                                                      ? 0.5
-                                                      : 1,
+                                                          'R' ||
+                                                      snapshot.data!.docs[index]
+                                                              ['status'] ==
+                                                          'A'
+                                                  ? 0.5
+                                                  : 1,
                                               child: Container(
                                                 margin:
                                                     EdgeInsets.only(bottom: 5),
@@ -447,6 +456,22 @@ class _ChatDetailState extends State<ChatDetail> {
                                                           CrossAxisAlignment
                                                               .start,
                                                       children: [
+                                                        snapshot.data!.docs[
+                                                                        index][
+                                                                    'status'] ==
+                                                                'A'
+                                                            ? Text(
+                                                                ' Congratulations, Order accepted',
+                                                                style: TextStyle(
+                                                                    color: Colors
+                                                                        .green,
+                                                                    fontSize:
+                                                                        14,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold),
+                                                              )
+                                                            : SizedBox(),
                                                         Text(
                                                           'Rent Request',
                                                           style: TextStyle(
@@ -873,6 +898,7 @@ class _ChatDetailState extends State<ChatDetail> {
                       InkWell(
                         onTap: () {
                           chatController.submitRequest(widget.toId);
+                          chatController.clearDataAfterSubmit();
                         },
                         child: Center(
                           child: Container(

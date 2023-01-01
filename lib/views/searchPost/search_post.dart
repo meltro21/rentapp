@@ -6,6 +6,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:rentapp/controllers/search_post_controller.dart';
 
+import '../../controllers/user_info_controller.dart';
 import '../home/add_detail_Home.dart';
 
 class SearchPost extends StatefulWidget {
@@ -18,6 +19,8 @@ class SearchPost extends StatefulWidget {
 
 class _SearchPostState extends State<SearchPost> {
   SearchPostController searchPostController = Get.put(SearchPostController());
+
+  UserInfoController userInfoController = Get.find();
 
   @override
   void initState() {
@@ -250,6 +253,9 @@ class _SearchPostState extends State<SearchPost> {
                               itemBuilder: ((context, index) {
                                 return GestureDetector(
                                   onTap: (() {
+                                    userInfoController.getPostUserAllData(
+                                        searchPostController
+                                            .postsList[index].userId);
                                     Get.to(AddDetailHome(
                                         postDetails: searchPostController
                                             .postsList[index]));

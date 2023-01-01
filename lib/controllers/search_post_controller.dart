@@ -53,6 +53,7 @@ class SearchPostController extends GetxController {
         PostsModel temp = PostsModel.empty();
         temp.id = posts.docs[i]['id'];
         temp.category = posts.docs[i]['category'];
+        temp.subCategory = posts.docs[i]['subCategory'];
         temp.price = posts.docs[i]['price'];
         temp.model = posts.docs[i]['model'];
         temp.description = posts.docs[i]['description'];
@@ -60,6 +61,11 @@ class SearchPostController extends GetxController {
         temp.address = posts.docs[i]['address'];
         temp.lat = posts.docs[i]['lat'];
         temp.lng = posts.docs[i]['lng'];
+        temp.userId = posts.docs[i]['userId'];
+        temp.favorites = posts.docs[i]['favorites'];
+        temp.status = posts.docs[i]['status'];
+        temp.startDate = posts.docs[i]['startDate'];
+        temp.endDate = posts.docs[i]['endDate'];
         //temp.createdAt = posts.docs[i]['createdAt'];
         postsList.add(temp);
       }

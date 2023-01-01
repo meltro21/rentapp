@@ -364,6 +364,36 @@ class ChatController extends GetxController {
         "startDate": startDate,
         "endDate": endDate
       });
+
+      await _firebaseFirestore
+          .collection('Chats/$fromId/$toId')
+          .doc(fromMessageId)
+          .update({
+        'type': 'R',
+        'to': toId,
+        'from': userId,
+        'createdAt': DateTime.now(),
+        'message': '1',
+        'startDate': startDate.toString(),
+        'endDate': endDate.toString(),
+        'amount': amountController.text,
+        'status': 'A'
+      });
+
+      await _firebaseFirestore
+          .collection('Chats/$toId/$fromId')
+          .doc(toMessageId)
+          .update({
+        'type': 'R',
+        'to': toId,
+        'from': userId,
+        'createdAt': DateTime.now(),
+        'message': '1',
+        'startDate': startDate.toString(),
+        'endDate': endDate.toString(),
+        'amount': amountController.text,
+        'status': 'A'
+      });
     } catch (err) {}
   }
 
@@ -448,5 +478,10 @@ class ChatController extends GetxController {
     } catch (err) {
       print('getPost error $err');
     }
+  }
+
+  clearDataAfterSubmit() {
+    amountController.clear();
+    selectedAdDetails = PostsModel.empty().obs;
   }
 }

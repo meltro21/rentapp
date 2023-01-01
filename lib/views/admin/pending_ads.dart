@@ -71,7 +71,7 @@ class _PendingAdsState extends State<PendingAds> {
                         }),
                         child: Container(
                           margin: EdgeInsets.only(left: 10, right: 10, top: 10),
-                          height: mediaHeight * 0.14,
+                          height: mediaHeight * 0.16,
                           width: mediaWidth,
                           child: Row(
                             children: [
@@ -98,9 +98,17 @@ class _PendingAdsState extends State<PendingAds> {
                                 ),
                                 Positioned(
                                   child: Container(
-                                    color: pendingAdsController.dropdownvalue[index]=="rejected"? Colors.red:pendingAdsController.dropdownvalue[index]=="pending"?Colors.yellow:Colors.green,
+                                    color: pendingAdsController
+                                                .dropdownvalue[index] ==
+                                            "rejected"
+                                        ? Colors.red
+                                        : pendingAdsController
+                                                    .dropdownvalue[index] ==
+                                                "pending"
+                                            ? Colors.yellow
+                                            : Colors.green,
                                     child: Text(pendingAdsController
-                                            .dropdownvalue[index]),
+                                        .dropdownvalue[index]),
                                   ),
                                 ),
                               ]),

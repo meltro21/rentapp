@@ -43,7 +43,10 @@ class HomeScreenController extends GetxController {
     userId = user.uid;
     loading.value = true;
     try {
-      var posts = await _firebaseFirestore.collection('Posts').get();
+      var posts = await _firebaseFirestore
+          .collection('Posts')
+          .where('status', isEqualTo: 'approved')
+          .get();
       print('posts is $posts');
       print('posts ${posts.docs[0]['category']}');
       for (int i = 0; i < posts.docs.length; i++) {

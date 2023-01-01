@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:rentapp/controllers/auth_controller.dart';
+import 'package:rentapp/models/feedback_model.dart';
 import 'package:rentapp/models/user_model.dart';
 
 class AddDetailController extends GetxController {
@@ -16,6 +17,9 @@ class AddDetailController extends GetxController {
   User? currentUser;
   String currentUserId = '';
   UserModel posterInfo = UserModel('', '', '', '', '');
+
+  List<FeedbackModel> feedbackList = [];
+  int avgRating = 0;
   changeReadMoreValue() {
     readMore.value = !readMore.value;
   }
@@ -52,8 +56,31 @@ class AddDetailController extends GetxController {
         .get();
     posterInfo.eamil = a.docs[0]['email'];
     posterInfo.name = a.docs[0]['name'];
+
+    var feedback = await _firestore
+        .collection("Feedback")
+        .where('toId', isEqualTo: posterId)
+        .get();
+
+    int sum = 0;
+
+    for (int i = 0; i < feedback.docs.length; i++) {
+      FeedbackModel temp = FeedbackModel.empty();
+      temp.rating = feedback.docs[i]['rating'];
+      temp.feedback = feedback.docs[i]['description'];
+
+      feedbackList.add(temp);
+      sum += temp.rating;
+    }
+    if (feedback.docs.length > 0) {
+      avgRating = sum ~/ feedback.docs.length;
+    }
+
     print('email is $posterInfo');
     print("end");
+    print('avgRating is $avgRating');
+    print('sum is $sum');
+    print(a.docs.length);
     return posterInfo;
   }
 }

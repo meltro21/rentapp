@@ -80,8 +80,11 @@ class UserInfoController extends GetxController {
   Future<void> submitFeedback(int index) async {
     loading.value = true;
     var fromId = currentUserInfo.userId;
-    var toId = postsList[index].userId;
+    var toId = postsList[index].renteeId;
     var adId = postsList[index].id;
+
+    print('fromid is $fromId');
+    print('to id is $toId');
 
     try {
       await _firebaseFirestore
@@ -141,6 +144,7 @@ class UserInfoController extends GetxController {
         temp.status = posts.docs[i]['status'];
         temp.startDate = posts.docs[i]['startDate'];
         temp.endDate = posts.docs[i]['endDate'];
+        temp.renteeId = posts.docs[i]['renteeId'];
         //temp.createdAt = posts.docs[i]['createdAt'];
         postsList.add(temp);
       }
