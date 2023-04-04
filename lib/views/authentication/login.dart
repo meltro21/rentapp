@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:rentapp/controllers/auth_controller.dart';
 import 'package:rentapp/main.dart';
+import 'package:rentapp/views/admin/pending_ads.dart';
 import 'package:rentapp/views/authentication/background.dart';
 import 'package:rentapp/views/authentication/forgot_password.dart';
 import 'package:rentapp/views/authentication/register.dart';
@@ -98,7 +99,11 @@ class LoginScreen extends StatelessWidget {
                                     .signInWithEmailAndPassword(
                                         emailController.text,
                                         passwordController.text);
-                                if (signIn) {
+                                bool isAdmin = await authController
+                                    .checkAdmin(emailController.text);
+                                if (signIn && isAdmin) {
+                                  Get.to(PendingAds());
+                                } else if (signIn) {
                                   Get.to(MyHomePage());
                                 }
                               }

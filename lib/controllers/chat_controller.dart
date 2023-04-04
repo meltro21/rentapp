@@ -489,6 +489,8 @@ class ChatController extends GetxController {
 
   clearDataAfterSubmit() {
     amountController.clear();
-    selectedAdDetails = PostsModel.empty().obs;
+    selectedAdDetails.value = PostsModel.empty();
+    startDate.value = DateTime.now();
+    endDate.value = DateTime.now();
   }
 }

@@ -85,6 +85,7 @@ class RegisterScreen extends StatelessWidget {
                           return null;
                         },
                         controller: phoneController,
+                        keyboardType: TextInputType.number,
                         decoration: InputDecoration(labelText: "Mobile Number"),
                       ),
                     ),

@@ -129,28 +129,28 @@ class _HomeScreenState extends State<HomeScreen> {
                             ],
                           ),
                         ),
-                        InkWell(
-                          onTap: () {
-                            homeScreenController.changeCategory(2);
-                          },
-                          child: Column(
-                            children: [
-                              Text('Agriculture'),
-                              SizedBox(
-                                height: 5,
-                              ),
-                              Obx(
-                                () => homeScreenController.category == 2
-                                    ? Container(
-                                        height: 2,
-                                        width: mediaWidth / 4,
-                                        color: Colors.purple[400],
-                                      )
-                                    : SizedBox(),
-                              ),
-                            ],
-                          ),
-                        )
+                        // InkWell(
+                        //   onTap: () {
+                        //     homeScreenController.changeCategory(2);
+                        //   },
+                        //   child: Column(
+                        //     children: [
+                        //       Text('Agriculture'),
+                        //       SizedBox(
+                        //         height: 5,
+                        //       ),
+                        //       Obx(
+                        //         () => homeScreenController.category == 2
+                        //             ? Container(
+                        //                 height: 2,
+                        //                 width: mediaWidth / 4,
+                        //                 color: Colors.purple[400],
+                        //               )
+                        //             : SizedBox(),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // )
                       ],
                     ),
                     //Subcategory: Construction

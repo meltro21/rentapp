@@ -18,7 +18,7 @@ class PendingAdsController extends GetxController {
     try {
       var posts = await _firebaseFirestore
           .collection('Posts')
-          // .where('status', isEqualTo: "pending")
+          .orderBy('createdAt', descending: true)
           .get();
       print('posts is $posts');
       for (int i = 0; i < posts.docs.length; i++) {

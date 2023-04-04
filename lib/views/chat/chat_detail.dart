@@ -10,6 +10,8 @@ import 'package:rentapp/controllers/chat_controller.dart';
 import 'package:rentapp/controllers/user_info_controller.dart';
 import 'package:rentapp/models/posts_model.dart';
 import 'package:rentapp/views/chat/all_ads.dart';
+import 'package:top_snackbar_flutter/custom_snack_bar.dart';
+import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 class ChatDetail extends StatefulWidget {
   // PostsModel postDetails;
@@ -902,6 +904,35 @@ class _ChatDetailState extends State<ChatDetail> {
                       ),
                       InkWell(
                         onTap: () async {
+                          if (chatController.endDate.value
+                              .isBefore(chatController.startDate.value)) {
+                            Get.showSnackbar(GetSnackBar(
+                              title: 'Error',
+                              message: 'End date cannot come before start date',
+                              duration: Duration(seconds: 3),
+                              borderColor: Colors.green,
+                              backgroundColor: Colors.red,
+                            ));
+                          } else if (chatController.amountController.text ==
+                              '') {
+                            Get.showSnackbar(GetSnackBar(
+                              title: 'Error',
+                              message: 'Amout cannot be ampty',
+                              duration: Duration(seconds: 3),
+                              borderColor: Colors.green,
+                              backgroundColor: Colors.red,
+                            ));
+                          } else if (chatController
+                                  .selectedAdDetails.value.address ==
+                              '') {
+                            Get.showSnackbar(GetSnackBar(
+                              title: 'Error',
+                              message: 'Select an add',
+                              duration: Duration(seconds: 3),
+                              borderColor: Colors.green,
+                              backgroundColor: Colors.red,
+                            ));
+                          }
                           await chatController.submitRequest(widget.toId);
                           chatController.clearDataAfterSubmit();
                         },

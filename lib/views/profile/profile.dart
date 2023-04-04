@@ -80,17 +80,17 @@ class _ProfileState extends State<Profile> {
               ),
             ),
             Divider(),
-            Row(
-              children: [
-                Text(
-                  'Buy Orders',
-                  style: TextStyle(
-                    color: Colors.grey[400],
-                    fontSize: 22,
-                  ),
-                ),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Text(
+            //       'Buy Orders',
+            //       style: TextStyle(
+            //         color: Colors.grey[400],
+            //         fontSize: 22,
+            //       ),
+            //     ),
+            //   ],
+            // ),
           ]),
         ),
       ),

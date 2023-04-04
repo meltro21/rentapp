@@ -49,7 +49,8 @@ class _PendingAdsState extends State<PendingAds> {
     var mediaWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pending Ads"),
+        automaticallyImplyLeading: false,
+        title: Text("Admin"),
       ),
       body: SafeArea(
         child: Container(
@@ -65,9 +66,9 @@ class _PendingAdsState extends State<PendingAds> {
                     itemBuilder: ((context, index) {
                       return GestureDetector(
                         onTap: (() {
-                          Get.to(AddDetailHome(
-                              postDetails:
-                                  pendingAdsController.postsList[index]));
+                          // Get.to(AddDetailHome(
+                          //     postDetails:
+                          //         pendingAdsController.postsList[index]));
                         }),
                         child: Container(
                           margin: EdgeInsets.only(left: 10, right: 10, top: 10),

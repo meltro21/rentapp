@@ -112,6 +112,22 @@ class AuthController extends GetxController {
     return true;
   }
 
+  Future<bool> checkAdmin(String email) async {
+    try {
+      var a = await _firestore.collection('Users').get();
+      for (var i = 0; i < a.docs.length; i++) {
+        if (email.toLowerCase() == 'admin@gmail.com') {
+          return true;
+        }
+      }
+      print('value of a is $a');
+      return false;
+    } catch (err) {
+      print('err is $err');
+    }
+    return false;
+  }
+
   Future<bool> forgotPassword(String email) async {
     loading.value = true;
     try {
